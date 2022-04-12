@@ -1,3 +1,8 @@
+/* 
+    *** 
+    GLOBAL VARIABLES   
+    *** 
+*/
 
 let attributeType = {
     "year": "quantitative",
@@ -30,6 +35,19 @@ let attributeType = {
     "mental mood": "categorical",
     "abs": "categorical"
 }
+
+/* 
+    *** 
+    EVENT LISTENERS  
+    *** 
+*/
+
+
+/* 
+    *** 
+    FUNCTIONS 
+    ***
+*/
 
 //makeVisualization(attributes: {}) => NULL
 function makeVisualization(attributes) {
