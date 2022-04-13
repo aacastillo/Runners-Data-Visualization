@@ -42,6 +42,8 @@ let attributeType = {
     *** 
 */
 
+// EL: On page load, default visualization mileage trend graph
+// EL: On page load, load variable selection
 
 /* 
     *** 

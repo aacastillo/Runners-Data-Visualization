@@ -1,0 +1,24 @@
+#layout-sect-1 {
+    display: flex;
+    flex-direction: row;
+    height: 70%;
+}
+
+#main-vis {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 70%;
+}
+
+#var-select {
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+#var-select-header {
+    font-weight: bolder;
+    margin: 20px;
+}
