@@ -4,7 +4,7 @@
     *** 
 */
 
-let attributeType = {
+const attributeType = {
     "year": "quantitative",
     "miles": "quantitative",
     "time": "quantitative",
@@ -42,6 +42,10 @@ let attributeType = {
     *** 
 */
 
+window.addEventListener('load', async () => {
+    const attributes = new Set(["conditions", "pace"]);
+    makeVisualization(attributes)
+});
 // EL: On page load, default visualization mileage trend graph
 // EL: On page load, load variable selection
 
