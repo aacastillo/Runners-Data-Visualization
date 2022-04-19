@@ -44,7 +44,7 @@ const attributeType = {
 
 window.addEventListener('load', async () => {
     const attributes = new Set(["conditions", "pace"]);
-    makeVisualization(attributes)
+    makeVisualization(attributes);
 });
 // EL: On page load, default visualization mileage trend graph
 // EL: On page load, load variable selection
@@ -60,7 +60,7 @@ function makeVisualization(attributes) {
     removeOldVisualization();
 
     const vis_div = "#main-vis-wrapper"
-    const data_url = "https://raw.githubusercontent.com/aacastillo/Runners-Data/main/RunningDataset.csv";
+    const data_url = "https://raw.githubusercontent.com/aacastillo/Runners-Data/main/RunningData.csv";
     if (attributes.size === 1) {
         const [a1] = attributes;
         if (attributeType[a1] === "categorical") return buildBarChart(a1, vis_div, data_url);
@@ -112,9 +112,7 @@ function buildScatterPlot() {
 //buildWhiskerPlot(a1: categorical string, a2: quantitative string) => None
 function buildWhiskerPlot(a1, a2, vis_div, data_url) {
     // set the dimensions and margins of the graph
-    var margin = {top: 10, right: 30, bottom: 30, left: 40},
-    width = 460 - margin.left - margin.right,
-    height = 400 - margin.top - margin.bottom;
+    const [margin, width, height] = getDimensions();
 
     // append the svg object to the body of the page
     var svg = d3.select(vis_div)
@@ -127,14 +125,13 @@ function buildWhiskerPlot(a1, a2, vis_div, data_url) {
 
     // Read the data and compute summary statistics for each specie
     d3.csv(data_url, function(data) {
-
         // Compute quartiles, median, inter quantile range min and max --> these info are then used to draw the box.
         var sumstat = d3.nest() // nest function allows to group the calculation per level of a factor
-        .key(function(d) { return d.a1;})
+        .key(function(d) { return d[a1];})
         .rollup(function(d) {
-            q1 = d3.quantile(d.map(function(g) { return g.a2;}).sort(d3.ascending),.25)
-            median = d3.quantile(d.map(function(g) { return g.a2;}).sort(d3.ascending),.5)
-            q3 = d3.quantile(d.map(function(g) { return g.a2;}).sort(d3.ascending),.75)
+            q1 = d3.quantile(d.map(function(g) { return g[a2];}).sort(d3.ascending),.25)
+            median = d3.quantile(d.map(function(g) { return g[a2];}).sort(d3.ascending),.5)
+            q3 = d3.quantile(d.map(function(g) { return g[a2];}).sort(d3.ascending),.75)
             interQuantileRange = q3 - q1
             min = q1 - 1.5 * interQuantileRange
             max = q3 + 1.5 * interQuantileRange
@@ -145,7 +142,7 @@ function buildWhiskerPlot(a1, a2, vis_div, data_url) {
         // Show the X scale
         var x = d3.scaleBand()
             .range([ 0, width ])
-            .domain(["rainy", "snowy", "windy", "hot", "clear"])
+            .domain(["rainy", "snowy", "windy", "clear", "cloudy", "foggy", "humid", "indoors", "partly cloudy", "sunny"])
             .paddingInner(1)
             .paddingOuter(.5)
         svg.append("g")
@@ -154,7 +151,7 @@ function buildWhiskerPlot(a1, a2, vis_div, data_url) {
 
         // Show the Y scale
         var y = d3.scaleLinear()
-            .domain([3,9])
+            .domain([7,13])
             .range([height, 0])
         svg.append("g").call(d3.axisLeft(y))
 
@@ -166,13 +163,13 @@ function buildWhiskerPlot(a1, a2, vis_div, data_url) {
             .append("line")
                 .attr("x1", function(d){return(x(d.key))})
                 .attr("x2", function(d){return(x(d.key))})
-                .attr("y1", function(d){return(y(d.value.min))})
+                .attr("y1", function(d){console.log(d.value);return(y(d.value.min))})
                 .attr("y2", function(d){return(y(d.value.max))})
                 .attr("stroke", "black")
                 .style("width", 40)
 
         // rectangle for the main box
-        var boxWidth = 100
+        var boxWidth = 20
         svg
         .selectAll("boxes")
         .data(sumstat)
@@ -198,4 +195,13 @@ function buildWhiskerPlot(a1, a2, vis_div, data_url) {
                 .attr("stroke", "black")
                 .style("width", 80)
     })
+}
+
+function getDimensions() {
+    const main_vis = document.getElementById("main-vis-wrapper");
+    var margin = {top: 50, right: 90, bottom: 50, left: 100},
+    width = main_vis.offsetWidth - margin.left - margin.right,
+    height = main_vis.offsetHeight - margin.top - margin.bottom;
+    console.log(width, height);
+    return [margin, width, height];
 }
