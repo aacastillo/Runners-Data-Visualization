@@ -31,10 +31,52 @@ const attributeType = {
     "terrain": "categorical",
     "conditions": "categorical",
     "podcast": "categorical",
-    "physical mood": "categorical",
-    "mental mood": "categorical",
+    "physical": "categorical",
+    "mental": "categorical",
     "abs": "categorical"
 }
+
+
+const catOrder = {
+    "month": {"ordered": true,
+              "order" : {
+                  jan: 1, feb: 2, mar:3, apr:4, may:5, jun:6, jul:7, aug:8, sep:9,
+                  oct:10, nov:11, dec:12
+              }},
+    "season": {"ordered": true,
+                "order": {
+                    spring:1, summer:2, fall:3, winter:4
+                }},
+    "day": {"ordered": true,
+            "order": {
+                sun:1, mon:2, tue:3, wen:4, thu:5, fri:6, sat:7
+            }},
+    "shoes": {"ordered": false},
+    "race": {"ordered": false},
+    "towns": {"ordered": false},
+    "state": {"ordered": false},
+    "terrain": {"ordered": false},
+    "conditions": {"ordered": false},
+    "shoes": {"podcast": false},
+    "physical": {"ordered": true,
+            "order": {
+                terrible:1, bad:2, ok:3, good:4, amazing:5
+            }},
+    "mental": {"ordered": true,
+            "order": {
+                terrible:1, bad:2, ok:3, good:4, amazing:5
+            }},
+    "abs": {"podcast": false},
+
+    compare: function (att, val1, val2){
+        if(!this[att].ordered){
+            return undefined;
+        }
+        return this[att].order[val1]-this[att].order[val2];
+    }
+};
+
+console.log(catOrder.compare("state", "mon", "wen"));
 
 /* 
     *** 
