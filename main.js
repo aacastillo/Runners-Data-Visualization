@@ -68,15 +68,17 @@ const catOrder = {
             }},
     "abs": {"podcast": false},
 
-    compare: function (att, val1, val2){
+    //function for easy comparing
+    //all inputs are strings
+    //returns - if v1 before v2, + if after, 0 if the same
+    compare: function (att, v1, v2){
         if(!this[att].ordered){
             return undefined;
         }
-        return this[att].order[val1]-this[att].order[val2];
+        return this[att].order[v1]-this[att].order[v2];
     }
 };
 
-console.log(catOrder.compare("state", "mon", "wen"));
 
 /* 
     *** 
