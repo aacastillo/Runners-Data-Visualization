@@ -59,6 +59,8 @@ window.addEventListener('load', async () => {
 function makeVisualization(attributes) {
     removeOldVisualization();
 
+    console.log(attributes)
+
     const vis_div = "#main-vis-wrapper"
     const data_url = "https://raw.githubusercontent.com/aacastillo/Runners-Data/main/RunningData.csv";
     if (attributes.size === 1) {
@@ -68,8 +70,8 @@ function makeVisualization(attributes) {
         console.log("ERROR: invalid attribute selected or no type found");
     } else if (attributes.size === 2) {
         const [a1, a2] = attributes;
-        if (attributes.size === 1 && attributeType[a1] === "categorical") return buildClusterBarChart(a1, a2, vis_div, data_url);
-        if (attributes.size === 1 && attributeType[a1] === "quantitative") return buildScatterPlot(a1, a2, vis_div, data_url);
+        if (attributeType[a1] === "categorical" && attributeType[a2] === "categorical") return buildClusterBarChart(a1, a2, vis_div, data_url);
+        if (attributeType[a1] === "quantitative" && attributeType[a2] === "quantitative") return buildScatterPlot(a1, a2, vis_div, data_url);
         //Note: when making a whisker plot, make sure that a1, the first attribute passed, is categorical
         if (attributeType[a1] === "categorical" && attributeType[a2] ==="quantitative") return buildWhiskerPlot(a1, a2, vis_div, data_url);
         console.log("ERROR: invalid attributes selected or no type found");
@@ -113,84 +115,41 @@ function buildScatterPlot(a1, a2, vis_div, data_url) {
 
     // append the svg object to the body of the page
     var svg = d3.select(vis_div)
-    .append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-    .append("g")
-    .attr("transform",
-        "translate(" + margin.left + "," + margin.top + ")");
+        .append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    // Read the data and compute summary statistics for each specie
+    //Read the data
     d3.csv(data_url, function(data) {
-        // Compute quartiles, median, inter quantile range min and max --> these info are then used to draw the box.
-        var sumstat = d3.nest() // nest function allows to group the calculation per level of a factor
-        .key(function(d) { return d[a1];})
-        .rollup(function(d) {
-            q1 = d3.quantile(d.map(function(g) { return g[a2];}).sort(d3.ascending),.25)
-            median = d3.quantile(d.map(function(g) { return g[a2];}).sort(d3.ascending),.5)
-            q3 = d3.quantile(d.map(function(g) { return g[a2];}).sort(d3.ascending),.75)
-            interQuantileRange = q3 - q1
-            min = q1 - 1.5 * interQuantileRange
-            max = q3 + 1.5 * interQuantileRange
-            return({q1: q1, median: median, q3: q3, interQuantileRange: interQuantileRange, min: min, max: max})
-        })
-        .entries(data)
 
-        // Show the X scale
-        var x = d3.scaleBand()
-            .range([ 0, width ])
-            .domain(["rainy", "snowy", "windy", "clear", "cloudy", "foggy", "humid", "indoors", "partly cloudy", "sunny"])
-            .paddingInner(1)
-            .paddingOuter(.5)
+        // Add X axis
+        var x = d3.scaleLinear()
+        .domain([0, 1.05 * data.reduce((prev, current) => Math.max(prev, current[a1]), 0)])
+        .range([ 0, width ]);
         svg.append("g")
-            .attr("transform", "translate(0," + height + ")")
-            .call(d3.axisBottom(x))
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(x));
 
-        // Show the Y scale
+        // Add Y axis
         var y = d3.scaleLinear()
-            .domain([7,13])
-            .range([height, 0])
-        svg.append("g").call(d3.axisLeft(y))
+        .domain([0, 1.05 * data.reduce((prev, current) => Math.max(prev, current[a2]), 0)])
+        .range([ height, 0]);
+        svg.append("g")
+        .call(d3.axisLeft(y));
 
-        // Show the main vertical line
-        svg
-            .selectAll("vertLines")
-            .data(sumstat)
-            .enter()
-            .append("line")
-                .attr("x1", function(d){return(x(d.key))})
-                .attr("x2", function(d){return(x(d.key))})
-                .attr("y1", function(d){console.log(d.value);return(y(d.value.min))})
-                .attr("y2", function(d){return(y(d.value.max))})
-                .attr("stroke", "black")
-                .style("width", 40)
-
-        // rectangle for the main box
-        var boxWidth = 20
-        svg
-        .selectAll("boxes")
-        .data(sumstat)
+        // Add dots
+        svg.append('g')
+        .selectAll("dot")
+        .data(data)
         .enter()
-        .append("rect")
-            .attr("x", function(d){return(x(d.key)-boxWidth/2)})
-            .attr("y", function(d){return(y(d.value.q3))})
-            .attr("height", function(d){return(y(d.value.q1)-y(d.value.q3))})
-            .attr("width", boxWidth )
-            .attr("stroke", "black")
+        .append("circle")
+            .attr("cx", function (d) { return x(d[a1]); } )
+            .attr("cy", function (d) { return y(d[a2]); } )
+            .attr("r", 1.5)
             .style("fill", "#69b3a2")
 
-        // Show the median
-        svg
-            .selectAll("medianLines")
-            .data(sumstat)
-            .enter()
-            .append("line")
-                .attr("x1", function(d){return(x(d.key)-boxWidth/2) })
-                .attr("x2", function(d){return(x(d.key)+boxWidth/2) })
-                .attr("y1", function(d){return(y(d.value.median))})
-                .attr("y2", function(d){return(y(d.value.median))})
-                .attr("stroke", "black")
-                .style("width", 80)
     })
 }
 
