@@ -87,11 +87,12 @@ const catOrder = {
 */
 
 window.addEventListener('load', async () => {
-<<<<<<< HEAD
-    const attributes = new Set(["conditions"]);
-=======
-    const attributes = new Set(["cal", "miles"]);
->>>>>>> 6a4e176e70b7fb9ffd3bc45c08228354af2fc8e7
+
+    //const attributes = new Set(["conditions"]);
+
+    //const attributes = new Set(["shoes","terrain"]);
+    const attributes = new Set(["shoes"]);
+
     makeVisualization(attributes);
 });
 // EL: On page load, default visualization mileage trend graph
@@ -111,8 +112,9 @@ function makeVisualization(attributes) {
 
     const vis_div = "#main-vis-wrapper"
 
-    //const data_url = 'C:\Users\dayle\OneDrive\Desktop\cs571\Runners-Data-Visualization';
-    const data_url = '';
+    //const data_url = 'C:/Users/dayle/OneDrive/Desktop/cs571/Runners-Data-Visualization';
+    const data_url = 'https://raw.githubusercontent.com/aacastillo/Runners-Data/main/RunningData.csv';
+    
     if (attributes.size === 1) {
         const [a1] = attributes;
         if (attributeType[a1] === "categorical") return buildBarChart(a1, vis_div, data_url);
@@ -153,8 +155,10 @@ function buildBarChart(a1, a2, vis_div, data_url) {
     .attr("transform",
         "translate(" + margin.left + "," + margin.top + ")");
 
-    d3.csv('C:/Users/dayle/OneDrive/Desktop/cs571/Runners-Data-Visualization/RunningData.csv', function(data){
-        console.log(data);
+
+    const data_url_actual = 'https://raw.githubusercontent.com/aacastillo/Runners-Data/main/RunningData.csv';
+    d3.csv(data_url_actual, function(data){
+        //console.log(data);
         buildaBarChart({x:0, y:0, w:width, h:height}, data, {Xaxis: a1, Yaxis:""}, svg);
     })
 }
@@ -165,8 +169,23 @@ function buildTrendGraph() {
 }
 
 //buildClusterBarChart => None
-function buildClusterBarChart() {
+function buildClusterBarChart(a1, a2, vis_div, data_url) {
+    const [margin, width, height] = getDimensions();
+    var div = document.getElementById('main-vis-wrapper');
+    var svg = d3.select(div)
+    .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform",
+        "translate(" + margin.left + "," + margin.top + ")");
 
+
+    const data_url_actual = 'https://raw.githubusercontent.com/aacastillo/Runners-Data/main/RunningData.csv';
+    d3.csv(data_url_actual, function(data){
+        //console.log(data);
+        buildaClusterBarChart({x:0, y:0, w:width, h:height}, data, {Xaxis: a1, Yaxis:a2}, svg);
+    })
 }
 
 //buildScatterPlot => None

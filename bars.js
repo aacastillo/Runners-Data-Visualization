@@ -1,11 +1,23 @@
 function buildCount (data, attr){
+    var mil = true;
     let r = {};
     for(let i = 0; i < data.length; i++){
       let v = data[i][attr];
+      if(v === ""){
+          continue;
+      }
       if(r[v] >= 0){
-        r[v]++
+        if(mil){
+            r[v] += parseFloat(data[i].miles);
+        }else{
+            r[v]++
+        }
       }else{
-        r[v] = 1;
+          if(mil){
+                r[v] = parseFloat(data[i].miles);
+          }else{
+                r[v] = 1;
+          }
       }
     }
     //console.log(r);
@@ -18,21 +30,37 @@ function buildCount (data, attr){
   }
   
   function buildClusterCount(data, att1, att2){
+    var mil = true;
     let r = {}
     for(var i in data){
       //console.log(att1,att2);
       let v = data[i][att1];
       let x = data[i][att2];
+      if(v === "" || x === "" || v === undefined || x === undefined){
+        continue;
+      }
       if(r[v] != undefined){
         r[v].total++;
         if(r[v][x] >= 0){
-          r[v][x]++;
+            if(mil){
+                r[v][x] += parseFloat(data[i].miles);
+            }else{
+                r[v][x]++
+            }
         }else{
-          r[v][x] = 1;
+            if(mil){
+                r[v][x] = parseFloat(data[i].miles);
+          }else{
+                r[v][x] = 1;
+          }
         }
       }else{
         r[v] = {total: 1};
-        r[v][x] = 1;
+        if(mil){
+            r[v][x] = parseFloat(data[i].miles);
+        }else{
+            r[v][x] = 1;
+      }
       }
     }
   
@@ -74,24 +102,49 @@ function buildCount (data, attr){
     console.log(width, height);
     return [margin, width, height];
     }
-  
+
+    function swap(arr, i1, i2, idk){
+        // console.log(arr);
+        // console.log(arr[0]);
+        if(!idk){
+        var t = arr[i1];
+        arr[i1] = arr[i2];
+        arr[i2] = t;
+        }
+    }
+
+    function catSort(att, dat, idk){
+        if(!catOrder[att].ordered){
+            return;
+        }
+        for(var i in dat){
+            for(var j = 0; j < dat.length - i - 1; j++){
+                if(catOrder.compare(att, dat[j].val, dat[j+1].val)>0){
+                    console.log("swap in progress");
+                    swap(dat, j, j+1, idk);
+                }
+            }
+        }
+    }
+  //--------------------------------------------------------------------------------------------------------------
   function buildaBarChart (loc, data, attr, svg){
     //
-    console.log(data);
-    
     //
     var chart = svg.append('g')
       .attr('class', 'chart')
-    const margin = { left: loc.w/10, right: loc.w/10, top: loc.h/10, bottom: loc.h/10 };
+    /*const margin = { left: loc.w/10, right: loc.w/10, top: loc.h/10, bottom: loc.h/10 }; */
+    const margin = {left:0,right:0, top:0, bottom:0};
     
     let att = attr.Xaxis;
     let c = buildCount(data,att);
+    catSort(att,c, false);
     let dom = [];
     for(var i in c){
       dom.push(c[i].val);
     }
     maxC = maxCount(c);
-  
+
+
     var w = loc.w - margin.left - margin.right;
     var h = loc.h - margin.top - margin.bottom;
     //scales
@@ -139,16 +192,22 @@ function buildCount (data, attr){
   }
   
   //Clusterrrrr---------------------------------------------
-  function buildClusterBarChart(loc, data, attr){
+  function buildaClusterBarChart(loc, data, attr){
     console.log(loc.y);
     let att1 = attr.Xaxis;
     let att2 = attr.Yaxis;
     var c = buildClusterCount(data,att1,att2);
+    for(var i in c){
+        catSort(att2, c[i].att, false);
+    }
+    catSort(att1, c, false);
+    console.log(c);
   
     let svg = d3.select('svg');//remove if global svg
     var chart = svg.append('g')
       .attr('class', 'chart');
-    const margin = { left: loc.w/10, right: loc.w/10, top: loc.h/10, bottom: loc.h/10 };
+    //const margin = { left: loc.w/10, right: loc.w/10, top: loc.h/10, bottom: loc.h/10 };
+    const margin = {left:loc.w/10,right:0, top:0, bottom:0};
     //put domains in array form
     let dom1 = [];
     for(var i in c){
@@ -165,6 +224,18 @@ function buildCount (data, attr){
     var dom2 = [];
     for(var i in domt){
       dom2.push(i);
+      if(catOrder[att2].ordered){
+        if(dom2.length === 0){
+           continue;
+        }
+        for(var j = dom2.length - 1; j >= 0; j--){
+            if(catOrder.compare(att2, dom2[j], dom2[j-1])<0){
+               swap(dom2, j, j-1);
+             }else{
+                  break;
+              }
+        }
+      }
     }
     
     var w = loc.w - margin.left - margin.right;
