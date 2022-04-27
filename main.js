@@ -87,7 +87,11 @@ const catOrder = {
 */
 
 window.addEventListener('load', async () => {
+<<<<<<< HEAD
     const attributes = new Set(["conditions"]);
+=======
+    const attributes = new Set(["cal", "miles"]);
+>>>>>>> 6a4e176e70b7fb9ffd3bc45c08228354af2fc8e7
     makeVisualization(attributes);
 });
 // EL: On page load, default visualization mileage trend graph
@@ -103,6 +107,8 @@ window.addEventListener('load', async () => {
 function makeVisualization(attributes) {
     removeOldVisualization();
 
+    console.log(attributes)
+
     const vis_div = "#main-vis-wrapper"
 
     //const data_url = 'C:\Users\dayle\OneDrive\Desktop\cs571\Runners-Data-Visualization';
@@ -114,8 +120,8 @@ function makeVisualization(attributes) {
         console.log("ERROR: invalid attribute selected or no type found");
     } else if (attributes.size === 2) {
         const [a1, a2] = attributes;
-        if (attributes.size === 1 && attributeType[a1] === "categorical") return buildClusterBarChart(a1, a2, vis_div, data_url);
-        if (attributes.size === 1 && attributeType[a1] === "quantitative") return buildScatterPlot(a1, a2, vis_div, data_url);
+        if (attributeType[a1] === "categorical" && attributeType[a2] === "categorical") return buildClusterBarChart(a1, a2, vis_div, data_url);
+        if (attributeType[a1] === "quantitative" && attributeType[a2] === "quantitative") return buildScatterPlot(a1, a2, vis_div, data_url);
         //Note: when making a whisker plot, make sure that a1, the first attribute passed, is categorical
         if (attributeType[a1] === "categorical" && attributeType[a2] ==="quantitative") return buildWhiskerPlot(a1, a2, vis_div, data_url);
         console.log("ERROR: invalid attributes selected or no type found");
@@ -164,8 +170,50 @@ function buildClusterBarChart() {
 }
 
 //buildScatterPlot => None
-function buildScatterPlot() {
+function buildScatterPlot(a1, a2, vis_div, data_url) {
+    console.log("Build Scatter Plot")
 
+    // set the dimensions and margins of the graph
+    const [margin, width, height] = getDimensions();
+
+    // append the svg object to the body of the page
+    var svg = d3.select(vis_div)
+        .append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    //Read the data
+    d3.csv(data_url, function(data) {
+
+        // Add X axis
+        var x = d3.scaleLinear()
+        .domain([0, 1.05 * data.reduce((prev, current) => Math.max(prev, current[a1]), 0)])
+        .range([ 0, width ]);
+        svg.append("g")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(x));
+
+        // Add Y axis
+        var y = d3.scaleLinear()
+        .domain([0, 1.05 * data.reduce((prev, current) => Math.max(prev, current[a2]), 0)])
+        .range([ height, 0]);
+        svg.append("g")
+        .call(d3.axisLeft(y));
+
+        // Add dots
+        svg.append('g')
+        .selectAll("dot")
+        .data(data)
+        .enter()
+        .append("circle")
+            .attr("cx", function (d) { return x(d[a1]); } )
+            .attr("cy", function (d) { return y(d[a2]); } )
+            .attr("r", 1.5)
+            .style("fill", "#69b3a2")
+
+    })
 }
 
 //buildWhiskerPlot(a1: categorical string, a2: quantitative string) => None
