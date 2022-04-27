@@ -161,6 +161,13 @@ function buildCount (data, attr){
       .range([h+margin.top,margin.top]);
   
     const g = chart.append('g');
+
+
+    var div = d3.select("svg").append("div")	
+    .attr("class", "tooltip")				
+    .style("opacity", 0);
+
+
     //rectangles
     g.selectAll('rect')
       .data(c)
@@ -175,7 +182,17 @@ function buildCount (data, attr){
       .attr('width', bandScale.bandwidth())
       .attr('height', function(d) {
           return countScale(d.count);
-      });
+      })
+      .on("mouseover", function(d) {
+          console.log("hoverrr");		
+        div.transition()		
+            .duration(200)		
+            .style("opacity", .9);		
+        div	.html("<t>" + d.val + "</t>")	
+            .style("left", (d3.event.pageX) + "px")		
+            .style("top", (d3.event.pageY - 28) + "px");	
+        })
+      ;
   
     //axis
     var xAxis = d3.axisBottom()
@@ -280,7 +297,7 @@ function buildCount (data, attr){
                     ind = ((index + l/2)%l);
                 }
             }else{
-                if(((index - l/2)%(l/2))%2 === 0){
+                if((index < l/2 && index % 2 === 0) || (index >= l/2 && index % 2 === 1)){
                     ind = ((index + l/2)%l);
                 }
             }
@@ -332,7 +349,8 @@ function buildCount (data, attr){
   
     var legend = chart.append('g')
       .attr('id', 'legend');
-    var l = {x:loc.x + w - w/4, y:loc.y, w:w/3, h:h/4};
+    var l = {x:loc.x + w + w/48, y:loc.y, w:w/3, h:(h/48)*dom2.length};
+    if(dom2.length < 25){l.h = l.h*2;}
     var legendScale = d3.scaleBand()
       .domain(dom2)
       .range([l.y, l.y +l.h])

@@ -94,8 +94,8 @@ window.addEventListener('load', async () => {
 
     //const attributes = new Set(["conditions"]);
 
-    //const attributes = new Set(["day","mental"]);
-    const attributes = new Set(["day"]);
+    //const attributes = new Set(["mental","terrain"]);
+    const attributes = new Set(["mental"]);
 
     makeVisualization(attributes);
 });
