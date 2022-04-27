@@ -49,15 +49,18 @@ const catOrder = {
                 }},
     "day": {"ordered": true,
             "order": {
-                sun:1, mon:2, tue:3, wen:4, thu:5, fri:6, sat:7
+                sun:1, mon:2, tue:3, web:4, thu:5, fri:6, sat:7
             }},
     "shoes": {"ordered": false},
-    "race": {"ordered": false},
+    "race": {"ordered": true,
+             "order": {
+                 n:1, y:2
+             }},
     "towns": {"ordered": false},
     "state": {"ordered": false},
     "terrain": {"ordered": false},
     "conditions": {"ordered": false},
-    "shoes": {"podcast": false},
+    "shoes": {"ordered": false},
     "physical": {"ordered": true,
             "order": {
                 terrible:1, bad:2, ok:3, good:4, amazing:5
@@ -66,7 +69,8 @@ const catOrder = {
             "order": {
                 terrible:1, bad:2, ok:3, good:4, amazing:5
             }},
-    "abs": {"podcast": false},
+    "abs": {"ordered": false},
+    "podcast": {"ordered": false},
 
     //function for easy comparing
     //all inputs are strings
@@ -90,8 +94,8 @@ window.addEventListener('load', async () => {
 
     //const attributes = new Set(["conditions"]);
 
-    //const attributes = new Set(["shoes","terrain"]);
-    const attributes = new Set(["shoes"]);
+    //const attributes = new Set(["day","mental"]);
+    const attributes = new Set(["day"]);
 
     makeVisualization(attributes);
 });

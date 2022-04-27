@@ -255,10 +255,38 @@ function buildCount (data, attr){
     var countScale2 = d3.scaleLinear()
       .domain([0, Math.round(maxC*4/3)])
       .range([h + loc.y, loc.y]);
+
+    var colorScaleMax = 1;
+    if(catOrder[att2].ordered){
+        colorScaleMax = .5 + (1/dom2.length);
+    }
   
     var colorScale = d3.scaleBand()
       .domain(dom2)
-      .range([0, .5 + (1/dom2.length)])
+      .range([0, colorScaleMax]);
+
+    
+        colorScale2 = function(index){
+            if(catOrder[att2].ordered){
+                return colorScale(dom2[index]);
+            }
+            var l = dom2.length;
+            var ind = index;
+            if(l%2 === 1){
+                l--;
+            }
+            if(l%4 === 0){
+                if(index%2 === 1){
+                    ind = ((index + l/2)%l);
+                }
+            }else{
+                if(((index - l/2)%(l/2))%2 === 0){
+                    ind = ((index + l/2)%l);
+                }
+            }
+            return colorScale(dom2[ind]);
+        }
+
   
     //bars
     const g = [];
@@ -285,7 +313,7 @@ function buildCount (data, attr){
             return countScale(d.count);
         })
         .attr("fill", d => {
-          return d3.interpolateHslLong("red", "blue")(colorScale(d.val));
+          return d3.interpolateHslLong("red", "blue")(colorScale2(dom2.indexOf(d.val)));
         });
     }
   
@@ -324,7 +352,7 @@ function buildCount (data, attr){
         return legendScale.bandwidth();
       })
       .attr("fill", d => {
-          return d3.interpolateHslLong("red", "blue")(colorScale(d));
+          return d3.interpolateHslLong("red", "blue")(colorScale2(dom2.indexOf(d)));
         });
     for(var i in dom2){
       legend.append('text')
