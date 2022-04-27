@@ -65,10 +65,21 @@ function buildCount (data, attr){
     }
     return max;
   }
+
+  function getDimensions() {
+    const main_vis = document.getElementById("main-vis-wrapper");
+    var margin = {top: 50, right: 90, bottom: 50, left: 100},
+    width = main_vis.offsetWidth - margin.left - margin.right,
+    height = main_vis.offsetHeight - margin.top - margin.bottom;
+    console.log(width, height);
+    return [margin, width, height];
+    }
   
-  function buildBarChart (loc, data, attr){
-  
-    let svg = d3.select('svg'); //can be deleted if global svg
+  function buildaBarChart (loc, data, attr, svg){
+    //
+    console.log(data);
+    
+    //
     var chart = svg.append('g')
       .attr('class', 'chart')
     const margin = { left: loc.w/10, right: loc.w/10, top: loc.h/10, bottom: loc.h/10 };

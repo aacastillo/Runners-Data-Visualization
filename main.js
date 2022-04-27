@@ -87,7 +87,7 @@ const catOrder = {
 */
 
 window.addEventListener('load', async () => {
-    const attributes = new Set(["conditions", "pace"]);
+    const attributes = new Set(["conditions"]);
     makeVisualization(attributes);
 });
 // EL: On page load, default visualization mileage trend graph
@@ -104,7 +104,9 @@ function makeVisualization(attributes) {
     removeOldVisualization();
 
     const vis_div = "#main-vis-wrapper"
-    const data_url = "https://raw.githubusercontent.com/aacastillo/Runners-Data/main/RunningData.csv";
+
+    //const data_url = 'C:\Users\dayle\OneDrive\Desktop\cs571\Runners-Data-Visualization';
+    const data_url = '';
     if (attributes.size === 1) {
         const [a1] = attributes;
         if (attributeType[a1] === "categorical") return buildBarChart(a1, vis_div, data_url);
@@ -134,8 +136,21 @@ function removeOldVisualization() {
 }
 
 //buildBarChart() => None
-function buildBarChart() {
+function buildBarChart(a1, a2, vis_div, data_url) {
+    const [margin, width, height] = getDimensions();
+    var div = document.getElementById('main-vis-wrapper');
+    var svg = d3.select(div)
+    .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform",
+        "translate(" + margin.left + "," + margin.top + ")");
 
+    d3.csv('C:/Users/dayle/OneDrive/Desktop/cs571/Runners-Data-Visualization/RunningData.csv', function(data){
+        console.log(data);
+        buildaBarChart({x:0, y:0, w:width, h:height}, data, {Xaxis: a1, Yaxis:""}, svg);
+    })
 }
 
 //buildTrendGraph => None
