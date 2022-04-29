@@ -83,6 +83,22 @@ const catOrder = {
     }
 };
 
+const units = {
+    "miles": "mi",
+    "time": "",
+    "pace": "min/mile",
+    "cal": "",
+    "steps": "",
+    "heart rate": "bpm",
+    "VO2": "mL/kg/min",
+    "elev": "",
+    "EPM": "elev/mile",
+    "TOD": "",
+    "hour": "",
+    "ppl": "",
+    "temp": "degrees F",
+};
+
 
 /* 
     *** 
@@ -95,7 +111,7 @@ window.addEventListener('load', async () => {
     //const attributes = new Set(["conditions"]);
 
     //const attributes = new Set(["mental","physical"]);
-    const attributes = new Set(["mental"]);
+    const attributes = new Set(["steps"]);
 
     makeVisualization(attributes);
 });
