@@ -114,6 +114,7 @@ function buildCount (data, attr){
     }
 
     function catSort(att, dat, idk){
+      console.log(dat);
         if(!catOrder[att].ordered){
             return;
         }
@@ -137,6 +138,7 @@ function buildCount (data, attr){
     
     let att = attr.Xaxis;
     let c = buildCount(data,att);
+    console.log(c);
     catSort(att,c, false);
     let dom = [];
     for(var i in c){
@@ -184,16 +186,39 @@ function buildCount (data, attr){
           return countScale(d.count);
       })
       .on("mouseover", function(d) {
-          //console.log("hoverrr");
-          console.log('fucking coed');		
-        	g.append('rect')
-          .attr("x", bandScale(d.val))
-          .attr('y', h - countScale(d.count) + margin.bottom + loc.y)
-          .attr('width', bandScale.bandwidth())
+          //console.log("hoverrr");		
+
+          d3.select(this).attr('fill', '#3d3d3d');
+
+        	g.append('g').attr('id', 'bar-tooltip').append('rect')
+          .attr("x", bandScale(c[0].val) + 2)
+          .attr('y', margin.bottom + loc.y)
+          .attr('width', w/4)
           .attr('height', h/10)
-          .attr('fill', 'white')
-          .attr('id', 'tooltip');
-          console.log(d);
+          .attr('fill', 'lightgray');
+          d3.select('#bar-tooltip')
+          .append('text').text("Miles run where")
+          .attr('x', bandScale(c[0].val) + 10)
+          .attr('y', margin.bottom + loc.y + 10)
+          .attr('font-size', '8');
+          d3.select('#bar-tooltip')
+          .append('text').text(att + " is " + d.val + ": ")
+          .attr('x', bandScale(c[0].val) + 10)
+          .attr('y', margin.bottom + loc.y + 20)
+          .attr('font-size', '8');
+          d3.select('#bar-tooltip')
+          .append('text').text(Math.round(d.count * 100) / 100)
+          .attr('x', bandScale(c[0].val) + 10)
+          .attr('y', margin.bottom + loc.y + 30)
+          .attr('font-size', '8')
+          
+          //.attr('cols', '10');
+          //console.log(d);
+        })
+        .on('mouseout', function(d){
+          //console.log('out');
+          d3.select(this).attr('fill', 'blue');
+          d3.select('#bar-tooltip').remove();
         })
       ;
   
@@ -209,10 +234,17 @@ function buildCount (data, attr){
     var yAxisEl = chart.append('g')
     .attr('transform', 'translate(' + (margin.left + loc.x) + ',' + loc.y+ ')' )
     .call(yAxis);
+
+    svg.append("text")
+    .attr("class", "y label")
+    .attr("text-anchor", "end")
+    .attr("y", -10)
+    .attr('x', 0)
+    .text("Miles");
   }
   
   //Clusterrrrr---------------------------------------------
-  function buildaClusterBarChart(loc, data, attr){
+  function buildaClusterBarChart(loc, data, attr,svg){
     console.log(loc.y);
     let att1 = attr.Xaxis;
     let att2 = attr.Yaxis;
@@ -223,11 +255,10 @@ function buildCount (data, attr){
     catSort(att1, c, false);
     console.log(c);
   
-    let svg = d3.select('svg');//remove if global svg
     var chart = svg.append('g')
       .attr('class', 'chart');
     //const margin = { left: loc.w/10, right: loc.w/10, top: loc.h/10, bottom: loc.h/10 };
-    const margin = {left:loc.w/10,right:0, top:0, bottom:0};
+    const margin = {left:0,right:0, top:0, bottom:0};
     //put domains in array form
     let dom1 = [];
     for(var i in c){
@@ -307,6 +338,42 @@ function buildCount (data, attr){
             return colorScale(dom2[ind]);
         }
 
+        
+
+        // colorScale2 = function(index){
+        //   if(catOrder[att2].ordered){
+        //     return colorScale(dom2[index]);
+        //   }
+        //   var arr = [];
+        //   var l = dom2.length;
+        //   var odd = false;
+        //   if(l%2 === 1){
+        //     l--;
+        //     odd = true;
+        //   }
+        //   console.log(l);
+        //   for(var i = 0; i < l; i++){
+        //     console.log(i);
+        //     if(i < l/2 -1){
+        //       arr.push(2*i + 1);
+        //     }else if(i > l/2){
+        //       arr.push(2*i - l);
+        //     }else if(i === l/2 - 1){
+        //       arr.push(l - 1);
+        //     }else{
+        //       arr.push(0);
+        //     }
+        //   }
+        //   if(odd){
+        //     arr.push(l)
+        //   }
+        //   console.log(arr);
+        //   function f(n){
+        //     return arr[n];
+        //   }
+        //   return colorScale(dom2[f(index)]);
+        // }
+
   
     //bars
     const g = [];
@@ -334,6 +401,49 @@ function buildCount (data, attr){
         })
         .attr("fill", d => {
           return d3.interpolateHslLong("red", "blue")(colorScale2(dom2.indexOf(d.val)));
+        })
+        .on("mouseover", function(d) {
+          //console.log("hoverrr");		
+
+          d3.select(this).attr('fill', '#3d3d3d');
+
+        	g[0].append('g').attr('id', 'bar-tooltip').append('rect')
+          .attr("x", bandScale(c[0].val) + 2)
+          .attr('y', margin.bottom + loc.y)
+          .attr('width', w/4)
+          .attr('height', h/10)
+          .attr('fill', 'lightgray');
+          //text
+          d3.select('#bar-tooltip')
+          .append('text').text("Miles run where")
+          .attr('x', bandScale(c[0].val) + 10)
+          .attr('y', margin.bottom + loc.y + 10)
+          .attr('font-size', '8');
+          d3.select('#bar-tooltip')
+          .append('text').text(att1 + " is " + c[j].val)
+          .attr('x', bandScale(c[0].val) + 10)
+          .attr('y', margin.bottom + loc.y + 20)
+          .attr('font-size', '8');
+          d3.select('#bar-tooltip')
+          .append('text').text("and " + att2 + " is " + d.val + ": ")
+          .attr('x', bandScale(c[0].val) + 10)
+          .attr('y', margin.bottom + loc.y + 30)
+          .attr('font-size', '8');
+          d3.select('#bar-tooltip')
+          .append('text').text(Math.round(d.count * 100) / 100)
+          .attr('x', bandScale(c[0].val) + 10)
+          .attr('y', margin.bottom + loc.y + 40)
+          .attr('font-size', '8')
+          
+          //.attr('cols', '10');
+          //console.log(d);
+        })
+        .on('mouseout', function(d){
+          //console.log('out');
+          d3.select(this).attr('fill', d => {
+            return d3.interpolateHslLong("red", "blue")(colorScale2(dom2.indexOf(d.val)));
+          });
+          d3.select('#bar-tooltip').remove();
         });
     }
   
@@ -382,6 +492,13 @@ function buildCount (data, attr){
       .attr('font-size', '9')
       .text(dom2[i]);
     }
+
+    svg.append("text")
+    .attr("class", "y label")
+    .attr("text-anchor", "end")
+    .attr("y", -10)
+    .attr('x', 0)
+    .text("Miles");
     
   }
   
