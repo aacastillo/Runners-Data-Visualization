@@ -95,6 +95,7 @@ window.addEventListener('load', async () => {
     //const attributes = new Set(["conditions"]);
 
     //const attributes = new Set(["mental","terrain"]);
+    // const attributes = new Set(["mental"]);
     const attributes = new Set(["mental"]);
 
     makeVisualization(attributes);
@@ -168,7 +169,7 @@ function buildBarChart(a1, a2, vis_div, data_url) {
 }
 
 //buildTrendGraph => None
-function buildTrendGraph(a1, a2, vis_div, data_url) {
+function buildTrendGraph(a1, vis_div, data_url) {
     // set the dimensions and margins of the graph
     const [margin, width, height] = getDimensions();
 
@@ -198,7 +199,7 @@ function buildTrendGraph(a1, a2, vis_div, data_url) {
 
         // Add Y axis
         var y = d3.scaleLinear()
-            .domain([0, d3.max(data, function(d) { return +d.value; })])
+            .domain([0, d3.max(data, function(d) { return +d[a1]; })])
             .range([ height, 0 ]);
         svg.append("g")
             .call(d3.axisLeft(y));
@@ -211,7 +212,7 @@ function buildTrendGraph(a1, a2, vis_div, data_url) {
             .attr("stroke-width", 1.5)
             .attr("d", d3.line()
             .x(function(d) { return x(d.date) })
-            .y(function(d) { return y(d.value) })
+            .y(function(d) { return y(d[a1]) })
             )
     })
 
