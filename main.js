@@ -5,7 +5,7 @@
 */
 
 const attributeType = {
-    "year": "quantitative",
+    
     "miles": "quantitative",
     "time": "quantitative",
     "pace": "quantitative",
@@ -20,6 +20,7 @@ const attributeType = {
     "ppl": "quantitative",
     "temp": "quantitative",
 
+    "year": "categorical",
     "month": "categorical",
     "season": "categorical",
     "date": "categorical",
@@ -38,6 +39,10 @@ const attributeType = {
 
 
 const catOrder = {
+    "year": {"ordered": true,
+              "order" : {
+                  '2019': 1, '2020': 2, '2021': 3, '2022' : 4
+              }},
     "month": {"ordered": true,
               "order" : {
                   jan: 1, feb: 2, mar:3, apr:4, may:5, jun:6, jul:7, aug:8, sep:9,
@@ -111,7 +116,7 @@ window.addEventListener('load', async () => {
     //const attributes = new Set(["conditions"]);
 
     //const attributes = new Set(["mental","physical"]);
-    const attributes = new Set(["steps"]);
+    const attributes = new Set(['mental', "towns"]);
 
     makeVisualization(attributes);
 });
