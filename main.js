@@ -49,7 +49,7 @@ const catOrder = {
                 }},
     "day": {"ordered": true,
             "order": {
-                sun:1, mon:2, tue:3, web:4, thu:5, fri:6, sat:7
+                sun:1, mon:2, tue:3, wen:4, thu:5, fri:6, sat:7
             }},
     "shoes": {"ordered": false},
     "race": {"ordered": true,

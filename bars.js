@@ -184,13 +184,15 @@ function buildCount (data, attr){
           return countScale(d.count);
       })
       .on("mouseover", function(d) {
-          console.log("hoverrr");		
-        div.transition()		
-            .duration(200)		
-            .style("opacity", .9);		
-        div	.html("<t>" + d.val + "</t>")	
-            .style("left", (d3.event.pageX) + "px")		
-            .style("top", (d3.event.pageY - 28) + "px");	
+          //console.log("hoverrr");		
+        	g.append('rect')
+          .attr("x", bandScale(d.val))
+          .attr('y', h - countScale(d.count) + margin.bottom + loc.y)
+          .attr('width', bandScale.bandwidth())
+          .attr('height', h/10)
+          .attr('fill', 'white')
+          .attr('id', 'tooltip');
+          console.log(d);
         })
       ;
   
