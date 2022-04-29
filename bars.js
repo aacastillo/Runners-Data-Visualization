@@ -184,7 +184,8 @@ function buildCount (data, attr){
           return countScale(d.count);
       })
       .on("mouseover", function(d) {
-          //console.log("hoverrr");		
+          //console.log("hoverrr");
+          console.log('fucking coed');		
         	g.append('rect')
           .attr("x", bandScale(d.val))
           .attr('y', h - countScale(d.count) + margin.bottom + loc.y)
