@@ -112,13 +112,16 @@ const units = {
 */
 
 window.addEventListener('load', async () => {
-
+    //whiskerplot - const attributes = new Set(["conditions", "pace"]);
     //const attributes = new Set(["conditions"]);
     //const attributes = new Set(["mental","terrain"]);
-    // const attributes = new Set(["mental"]);
+    //const attributes = new Set(["mental"]);
     //const attributes = new Set(["pace"]);
+    const attributes0 = new Set(["miles", "pace"]);
+    makeVisualization(attributes0, "single-vis-2");
+    const attributes1 = new Set(["conditions", "pace"]);
+    makeVisualization(attributes1, "single-vis-1");
 
-    makeVisualization(attributes);
 });
 // EL: On page load, default visualization mileage trend graph
 // EL: On page load, load variable selection
@@ -129,13 +132,11 @@ window.addEventListener('load', async () => {
     ***
 */
 
-//makeVisualization(attributes: {}) => None
-function makeVisualization(attributes) {
-    removeOldVisualization();
+//makeVisualization(attributes: {}, vis_div: str) => None
+function makeVisualization(attributes, vis_div) {
 
     console.log(attributes)
-
-    const vis_div = "#main-vis-wrapper"
+    removeOldVisualization(vis_div);
 
     //const data_url = 'C:/Users/dayle/OneDrive/Desktop/cs571/Runners-Data-Visualization';
     const data_url = 'https://raw.githubusercontent.com/aacastillo/Runners-Data/main/RunningData.csv';
@@ -158,13 +159,14 @@ function makeVisualization(attributes) {
 }
 
 //removeOldVisualization() => None
-function removeOldVisualization() {
-    let cur_vis_div = document.getElementById("main-vis-wrapper");
-    const parent_vis_div = document.getElementById("main-vis");
+function removeOldVisualization(vis_div) {
+    let cur_vis_div = document.getElementById(vis_div);
+    const parent_vis_div = document.getElementById(vis_div+"-wrapper");
     parent_vis_div.removeChild(cur_vis_div);
 
     let new_vis_div = document.createElement('div');
-    new_vis_div.setAttribute('id', 'main-vis-wrapper');
+    new_vis_div.setAttribute('id', vis_div);
+    new_vis_div.classList.add("vis");
     parent_vis_div.appendChild(new_vis_div);
 }
 
@@ -279,7 +281,7 @@ function buildScatterPlot(a1, a2, vis_div, data_url) {
     const [margin, width, height] = getDimensions();
 
     // append the svg object to the body of the page
-    var svg = d3.select(vis_div)
+    var svg = d3.select("#" + vis_div)
         .append("svg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
@@ -321,10 +323,10 @@ function buildScatterPlot(a1, a2, vis_div, data_url) {
 //buildWhiskerPlot(a1: categorical string, a2: quantitative string) => None
 function buildWhiskerPlot(a1, a2, vis_div, data_url) {
     // set the dimensions and margins of the graph
-    const [margin, width, height] = getDimensions();
+    const [margin, width, height] = getDimensions(vis_div);
 
     // append the svg object to the body of the page
-    var svg = d3.select(vis_div)
+    var svg = d3.select("#"+vis_div)
     .append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
@@ -406,11 +408,12 @@ function buildWhiskerPlot(a1, a2, vis_div, data_url) {
     })
 }
 
-function getDimensions() {
-    const main_vis = document.getElementById("main-vis-wrapper");
+function getDimensions(vis_div) {
+    const main_vis = document.getElementById(vis_div);
     var margin = {top: 50, right: 90, bottom: 50, left: 100},
     width = main_vis.offsetWidth - margin.left - margin.right,
     height = main_vis.offsetHeight - margin.top - margin.bottom;
+    console.log(main_vis.offsetWidth, main_vis.offsetHeight)
     console.log(width, height);
     return [margin, width, height];
 }
