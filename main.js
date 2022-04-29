@@ -114,9 +114,9 @@ const units = {
 window.addEventListener('load', async () => {
 
     //const attributes = new Set(["conditions"]);
-
-    //const attributes = new Set(["mental","physical"]);
-    const attributes = new Set(['mental', "towns"]);
+    //const attributes = new Set(["mental","terrain"]);
+    // const attributes = new Set(["mental"]);
+    //const attributes = new Set(["pace"]);
 
     makeVisualization(attributes);
 });
@@ -189,8 +189,66 @@ function buildBarChart(a1, a2, vis_div, data_url) {
 }
 
 //buildTrendGraph => None
-function buildTrendGraph() {
+function buildTrendGraph(a1, vis_div, data_url) {
+    // set the dimensions and margins of the graph
+    const [margin, width, height] = getDimensions();
 
+    // append the svg object to the body of the page
+    var svg = d3.select(vis_div)
+        .append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    //Read the data
+    d3.csv(data_url, 
+
+        // format variables
+        function(d){
+            //console.log(d.year + "/" + d.date)
+            return { date : d3.timeParse("%Y/%m/%d")(d.year + "/" + d.date), value : d[a1] }
+          },
+        function(data) {
+            // Add X axis --> it is a date format
+            var x = d3.scaleTime()
+                .domain(d3.extent(data, function(d) { console.log(d.date); return d.date; }))
+                .range([ 0, width ]);
+            svg.append("text")      // text label for the x axis
+                .attr("x", 265 )
+                .attr("y",  height + margin.bottom)
+                .style("text-anchor", "middle")
+                .text("Date");
+            svg.append("g")
+                .attr("transform", "translate(0," + height + ")")
+                .call(d3.axisBottom(x))
+
+            // Add Y axis
+            var y = d3.scaleLinear()
+                .domain([0, d3.max(data, function(d) { return +d.value; })])
+                .range([ height, 0 ]);
+            svg.append("text")
+                .attr("transform", "rotate(-90)")
+                .attr("y", 0 - margin.left)
+                .attr("x",0 - (height / 2))
+                .attr("dy", "1em")
+                .style("text-anchor", "middle")
+                .text(a1 + "(min/mile)");
+            svg.append("g")
+                .call(d3.axisLeft(y));
+
+            // Add the line
+            svg.append("path")
+                .datum(data)
+                .attr("fill", "none")
+                .attr("stroke", "steelblue")
+                .attr("stroke-width", 1.5)
+                .attr("d", d3.line()
+                .x(function(d) { return x(d.date) })
+                .y(function(d) { return y(d.value) })
+                )
+        }
+    )
 }
 
 //buildClusterBarChart => None
