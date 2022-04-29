@@ -5,7 +5,7 @@
 */
 
 const attributeType = {
-    "year": "quantitative",
+    
     "miles": "quantitative",
     "time": "quantitative",
     "pace": "quantitative",
@@ -20,6 +20,7 @@ const attributeType = {
     "ppl": "quantitative",
     "temp": "quantitative",
 
+    "year": "categorical",
     "month": "categorical",
     "season": "categorical",
     "date": "categorical",
@@ -38,6 +39,10 @@ const attributeType = {
 
 
 const catOrder = {
+    "year": {"ordered": true,
+              "order" : {
+                  '2019': 1, '2020': 2, '2021': 3, '2022' : 4
+              }},
     "month": {"ordered": true,
               "order" : {
                   jan: 1, feb: 2, mar:3, apr:4, may:5, jun:6, jul:7, aug:8, sep:9,
@@ -49,7 +54,7 @@ const catOrder = {
                 }},
     "day": {"ordered": true,
             "order": {
-                sun:1, mon:2, tue:3, web:4, thu:5, fri:6, sat:7
+                sun:1, mon:2, tue:3, wen:4, thu:5, fri:6, sat:7
             }},
     "shoes": {"ordered": false},
     "race": {"ordered": true,
@@ -83,6 +88,22 @@ const catOrder = {
     }
 };
 
+const units = {
+    "miles": "mi",
+    "time": "",
+    "pace": "min/mile",
+    "cal": "",
+    "steps": "",
+    "heart rate": "bpm",
+    "VO2": "mL/kg/min",
+    "elev": "",
+    "EPM": "elev/mile",
+    "TOD": "",
+    "hour": "",
+    "ppl": "",
+    "temp": "degrees F",
+};
+
 
 /* 
     *** 
@@ -93,10 +114,9 @@ const catOrder = {
 window.addEventListener('load', async () => {
 
     //const attributes = new Set(["conditions"]);
-
     //const attributes = new Set(["mental","terrain"]);
     // const attributes = new Set(["mental"]);
-    const attributes = new Set(["pace"]);
+    //const attributes = new Set(["pace"]);
 
     makeVisualization(attributes);
 });
