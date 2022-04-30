@@ -100,6 +100,6 @@ const Units = {
     "EPM": "elev/mile",
     "TOD": "",
     "hour": "",
-    "ppl": "",
+    "people": "",
     "temp": "degrees F",
 };

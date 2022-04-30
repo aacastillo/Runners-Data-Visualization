@@ -220,7 +220,7 @@ function buildTrendGraph(a1, vis_div, data_url) {
                 .domain(d3.extent(data, function(d) {return d.date; }))
                 .range([ 0, width ]);
             svg.append("text")      // text label for the x axis
-                .attr("x", width/2)
+                .attr("x", width/2);
                 .attr("y",  height + margin.bottom)
                 .style("text-anchor", "middle")
                 .text("Date");

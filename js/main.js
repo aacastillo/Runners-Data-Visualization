@@ -10,15 +10,15 @@ window.addEventListener('load', async () => {
     RenderDropdown("single-vis-1-dropdown");
     MakeVisualization(attributes1, "single-vis-1");
 
-    const attributes2 = new Set(["miles", "pace"]);
+    const attributes2 = new Set(["VO2", "heart rate"]);
     RenderDropdown("single-vis-2-dropdown");
     MakeVisualization(attributes2, "single-vis-2");
 
-    const attributes3 = new Set(["pace"]);
+    const attributes3 = new Set(["towns",'towns']);
     RenderDropdown("single-vis-3-dropdown");
     MakeVisualization(attributes3, "single-vis-3");
 
-    const attributes4 = new Set(["mental","terrain"]);
+    const attributes4 = new Set(["year",'month']);
     RenderDropdown("single-vis-4-dropdown");
     MakeVisualization(attributes4, "single-vis-4");
 

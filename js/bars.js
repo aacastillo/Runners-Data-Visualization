@@ -100,7 +100,7 @@ function buildCount (data, attr){
 
   //returns [{town:Hadley}, ...]
   function townFix(d, att2){
-    console.log(d.length);
+    //console.log(d.length);
     var r = [];
     for(var i in d){
       var twn = d[i].towns;
@@ -155,14 +155,14 @@ function buildCount (data, attr){
   }
 
   function catSort(att, dat, idk){
-    console.log(dat);
+    //console.log(dat);
       if(!CatOrder[att].ordered){
           return;
       }
       for(var i in dat){
           for(var j = 0; j < dat.length - i - 1; j++){
               if(CatOrder.compare(att, dat[j].val, dat[j+1].val)>0){
-                  console.log("swap in progress");
+                  //console.log("swap in progress");
                   swap(dat, j, j+1, idk);
               }
           }
@@ -240,7 +240,7 @@ function buildCount (data, attr){
         	g.append('g').attr('id', 'bar-tooltip').append('rect')
           .attr("x", bandScale(c[0].val) + 2)
           .attr('y', margin.top + loc.y)
-          .attr('width', w/4+20)
+          .attr('width', 128)
           .attr('height', h/5)
           .attr('fill', 'lightgray');
           d3.select('#bar-tooltip')
@@ -315,7 +315,7 @@ function buildCount (data, attr){
   
   //Clusterrrrr---------------------------------------------
   function BuildaClusterBarChart(loc, data, attr,svg){
-    console.log(loc.y);
+    //console.log(loc.y);
     let att1 = attr.Xaxis;
     let att2 = attr.Yaxis;
     var c = buildClusterCount(data,att1,att2);
@@ -485,11 +485,11 @@ function buildCount (data, attr){
           //console.log("hoverrr");		
 
           d3.select(this).attr('fill', 'lightgray');
-
+          console.log(w/3+15);
         	g[0].append('g').attr('id', 'bar-tooltip').append('rect')
           .attr("x", bandScale(c[0].val) + 2)
           .attr('y', margin.top + loc.y)
-          .attr('width', w/3 + 15)
+          .attr('width', 128)
           .attr('height', h/4)
           .attr('fill', 'lightgray');
           //text

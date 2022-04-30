@@ -169,7 +169,7 @@ function buildScatterPlot(a1, a2, vis_div, data_url) {
         }
         svg.append("text")      // text label for the x axis
                 .attr("x",width/2)
-                .attr("y",  height + margin.bottom)
+                .attr("y",  height + margin.bottom - 10)
                 .style("text-anchor", "middle")
                 .text(str1);
         svg.append("text")
@@ -249,7 +249,7 @@ function buildWhiskerPlot(a1, a2, vis_div, data_url) {
         }
         svg.append("text")      // text label for the x axis
                 .attr("x",width/2)
-                .attr("y",  height + margin.bottom)
+                .attr("y",  height + margin.bottom - 10)
                 .style("text-anchor", "middle")
                 .text(qual);
         svg.append("text")
