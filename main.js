@@ -119,7 +119,7 @@ window.addEventListener('load', async () => {
     
     //
 
-    const attributes1 = new Set(["conditions", "pace"]);
+    const attributes1 = new Set(["pace", "pace"]);
     makeVisualization(attributes1, "single-vis-1");
 
     const attributes2 = new Set(["miles", "pace"]);
@@ -220,7 +220,7 @@ function buildTrendGraph(a1, vis_div, data_url) {
                 .domain(d3.extent(data, function(d) {return d.date; }))
                 .range([ 0, width ]);
             svg.append("text")      // text label for the x axis
-                .attr("x", 265 )
+                .attr("x", width/2)
                 .attr("y",  height + margin.bottom)
                 .style("text-anchor", "middle")
                 .text("Date");
