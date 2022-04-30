@@ -13,186 +13,32 @@
         <script src="https://d3js.org/d3.v4.js"></script>
     </head>
     <body> 
-        <div id="layout-sect-1">
-            <div id="main-vis">
-                <div id="main-vis-wrapper">
-                    test
-                </div>
-            </div>
-            <div id="var-select">
-                <div id="var-select-header">
-                    Variables:
-                </div>
-                <div id="var-select-options">
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="miles" id="flexCheckDefault" checked>
-                        <label class="form-check-label" for="flexCheckDefault">
-                          Miles
-                        </label>
-                      </div>
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="year" id="flexCheckChecked">
-                        <label class="form-check-label" for="flexCheckChecked">
-                          Year1
-                        </label>
-                      </div>
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="pace" id="flexCheckChecked">
-                        <label class="form-check-label" for="flexCheckChecked">
-                          Pace
-                        </label>
-                      </div>
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="cal" id="flexCheckChecked">
-                        <label class="form-check-label" for="flexCheckChecked">
-                          Calories
-                        </label>
-                      </div>
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="steps" id="flexCheckChecked">
-                        <label class="form-check-label" for="flexCheckChecked">
-                          Steps
-                        </label>
-                      </div>
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="HR" id="flexCheckChecked">
-                        <label class="form-check-label" for="flexCheckChecked">
-                          Heart Rate
-                        </label>
-                      </div>
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="VO2" id="flexCheckChecked">
-                        <label class="form-check-label" for="flexCheckChecked">
-                          VO2
-                        </label>
-                      </div>
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="elev" id="flexCheckChecked">
-                        <label class="form-check-label" for="flexCheckChecked">
-                          Elevation
-                        </label>
-                      </div>
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="EPM" id="flexCheckChecked">
-                        <label class="form-check-label" for="flexCheckChecked">
-                          Elevation per Minute
-                        </label>
-                      </div>
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="TOD" id="flexCheckChecked">
-                        <label class="form-check-label" for="flexCheckChecked">
-                          Time of Day
-                        </label>
-                      </div>
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="hour" id="flexCheckChecked">
-                        <label class="form-check-label" for="flexCheckChecked">
-                          Hour
-                        </label>
-                      </div>
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="ppl" id="flexCheckChecked">
-                        <label class="form-check-label" for="flexCheckChecked">
-                          # People
-                        </label>
-                      </div>
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="temp" id="flexCheckChecked">
-                        <label class="form-check-label" for="flexCheckChecked">
-                          Temperature
-                        </label>
-                      </div>
-    
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="month" id="flexCheckChecked">
-                        <label class="form-check-label" for="flexCheckChecked">
-                          Month
-                        </label>
-                      </div>
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="season" id="flexCheckChecked">
-                        <label class="form-check-label" for="flexCheckChecked">
-                          Season
-                        </label>
-                      </div>
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="date" id="flexCheckChecked">
-                        <label class="form-check-label" for="flexCheckChecked">
-                          Date
-                        </label>
-                      </div>
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="day" id="flexCheckChecked">
-                        <label class="form-check-label" for="flexCheckChecked">
-                          Day
-                        </label>
-                      </div>
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="shoes" id="flexCheckChecked">
-                        <label class="form-check-label" for="flexCheckChecked">
-                          Shoes
-                        </label>
-                      </div>
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="race" id="flexCheckChecked">
-                        <label class="form-check-label" for="flexCheckChecked">
-                          Race
-                        </label>
-                      </div>
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="towns" id="flexCheckChecked">
-                        <label class="form-check-label" for="flexCheckChecked">
-                          Towns
-                        </label>
-                      </div>
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="state" id="flexCheckChecked">
-                        <label class="form-check-label" for="flexCheckChecked">
-                          State
-                        </label>
-                      </div>
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="terrain" id="flexCheckChecked" >
-                        <label class="form-check-label" for="flexCheckChecked">
-                          Terrain
-                        </label>
-                      </div>
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="conditions" id="flexCheckChecked" >
-                        <label class="form-check-label" for="flexCheckChecked">
-                          Conditions
-                        </label>
-                      </div>
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="podcast" id="flexCheckChecked">
-                        <label class="form-check-label" for="flexCheckChecked">
-                          Podcast
-                        </label>
-                      </div>
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="physical mood" id="flexCheckChecked" >
-                        <label class="form-check-label" for="flexCheckChecked">
-                          Physical Mood
-                        </label>
-                      </div>
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="mental mood" id="flexCheckChecked">
-                        <label class="form-check-label" for="flexCheckChecked">
-                            Mental Mood
-                        </label>
-                      </div>
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="abs" id="flexCheckChecked" >
-                        <label class="form-check-label" for="flexCheckChecked">
-                          Abs
-                        </label>
-                      </div>
-                </div>
-            </div>
+      <div id="primary-var-wrapper">
+        <div id="primary-var-dropdown" class="dropdown">
+          primary dropdown
         </div>
-        <div id="layout-sect-2">
-            <div id="closer-look-wrapper">
-            </div>
+      </div>
+      <div id="all-vis-wrapper"> <!-- make flexbox-->
+        <div class="col">
+          <div id="single-vis-1-wrapper" class="vis-wrapper">
+            <div id="single-vis-1-dropdown" class="dropdown"> single vis dropdown 1 </div>
+            <div id="single-vis-1" class="vis"> vis 1</div> <!-- link d3 js to this-->
+          </div>
+          <div id="single-vis-2-wrapper" class="vis-wrapper">
+            <div id="single-vis-2-dropdown" class="dropdown"> single vis dropdown 2 </div>
+            <div id="single-vis-2" class="vis"> vis 2</div> <!-- link d3 js to this-->
+          </div>
         </div>
+        <div class="col">
+          <div id="single-vis-3-wrapper" class="vis-wrapper">
+            <div id="single-vis-3-dropdown" class="dropdown"> single vis dropdown 2 </div>
+            <div id="single-vis-3"  class="vis"> vis 3 </div> <!-- link d3 js to this-->
+          </div>
+          <div id="single-vis-4-wrapper" class="vis-wrapper">
+            <div id="single-vis-4-dropdown" class="dropdown"> single vis dropdown 3 </div>
+            <div id="single-vis-4"  class="vis"> vis 4 </div> <!-- link d3 js to this-->
+          </div>
+        </div>
+      </div>
     </body>
 </html>

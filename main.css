@@ -1,30 +1,37 @@
-#layout-sect-1 {
+html, body {
+    height: 95%;
+}
+#primary-var-wrapper {
+    width: 100%;
+    height: 5%;
+    text-align: center;
+}
+#all-vis-wrapper {
     display: flex;
     flex-direction: row;
-    height: 70%;
+    width: 100%;
+    height: 100%;
+    justify-content: space-evenly;
 }
-
-#main-vis {
+.vis-wrapper {
+    height: 50%;
+    width: 100%;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 70%;
-    margin: 60px;
+    align-content: center;
 }
-
-#main-vis-wrapper {
+.vis {
     width: 100%;
     height: 100%;
 }
-
-#var-select {
-    width: 30%;
+.dropdown {
+    margin: 10px;
+}
+.col {
     display: flex;
     flex-direction: column;
-    text-align: center;
-}
-
-#var-select-header {
-    font-weight: bolder;
-    margin: 20px;
+    justify-content: space-evenly;
+    align-items: center;
 }

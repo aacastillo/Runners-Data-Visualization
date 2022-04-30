@@ -94,39 +94,31 @@ function buildCount (data, attr){
     return max;
   }
 
-  function getDimensions() {
-    const main_vis = document.getElementById("main-vis-wrapper");
-    var margin = {top: 50, right: 90, bottom: 50, left: 100},
-    width = main_vis.offsetWidth - margin.left - margin.right,
-    height = main_vis.offsetHeight - margin.top - margin.bottom;
-    console.log(width, height);
-    return [margin, width, height];
-    }
+  function swap(arr, i1, i2, idk){
+      // console.log(arr);
+      // console.log(arr[0]);
+      if(!idk){
+      var t = arr[i1];
+      arr[i1] = arr[i2];
+      arr[i2] = t;
+      }
+  }
 
-    function swap(arr, i1, i2){
-        // console.log(arr);
-        // console.log(arr[0]);
-        var t = arr[i1];
-        arr[i1] = arr[i2];
-        arr[i2] = t;
-        
-    }
+  function catSort(att, dat, idk){
+    console.log(dat);
+      if(!catOrder[att].ordered){
+          return;
+      }
+      for(var i in dat){
+          for(var j = 0; j < dat.length - i - 1; j++){
+              if(catOrder.compare(att, dat[j].val, dat[j+1].val)>0){
+                  console.log("swap in progress");
+                  swap(dat, j, j+1, idk);
+              }
+          }
+      }
+  }
 
-    function catSort(att, dat){
-      //console.log(dat);
-        if(!catOrder[att].ordered){
-            return;
-        }
-        for(var i in dat){
-            for(var j = 0; j < dat.length - i - 1; j++){
-                if(catOrder.compare(att, dat[j].val, dat[j+1].val)>0){
-                    //console.log("swap in progress");
-                    swap(dat, j, j+1);
-                }
-            }
-        }
-        console.log(dat);
-    }
   //--------------------------------------------------------------------------------------------------------------
   function buildaBarChart (loc, data, attr, svg){
     //
@@ -176,7 +168,7 @@ function buildCount (data, attr){
       .data(c)
       .enter()
       .append('rect')
-    .attr("fill", "blue")
+    .attr("fill", "#69b3a2")
       .attr('x', function(d) {
           return bandScale(d.val);
       })
@@ -189,7 +181,7 @@ function buildCount (data, attr){
       .on("mouseover", function(d) {
           //console.log("hoverrr");		
 
-          d3.select(this).attr('fill', '#3d3d3d');
+          d3.select(this).attr('fill', 'lightgray');
 
         	g.append('g').attr('id', 'bar-tooltip').append('rect')
           .attr("x", bandScale(c[0].val) + 2)
@@ -218,7 +210,7 @@ function buildCount (data, attr){
         })
         .on('mouseout', function(d){
           //console.log('out');
-          d3.select(this).attr('fill', 'blue');
+          d3.select(this).attr('fill', '#69b3a2');
           d3.select('#bar-tooltip').remove();
         })
       ;
@@ -401,12 +393,12 @@ function buildCount (data, attr){
             return countScale(d.count);
         })
         .attr("fill", d => {
-          return d3.interpolateHslLong("red", "blue")(colorScale2(dom2.indexOf(d.val)));
+          return d3.interpolateHslLong("#69b3a2", "blue")(colorScale2(dom2.indexOf(d.val)));
         })
         .on("mouseover", function(d) {
           //console.log("hoverrr");		
 
-          d3.select(this).attr('fill', '#3d3d3d');
+          d3.select(this).attr('fill', 'lightgray');
 
         	g[0].append('g').attr('id', 'bar-tooltip').append('rect')
           .attr("x", bandScale(c[0].val) + 2)
@@ -442,7 +434,7 @@ function buildCount (data, attr){
         .on('mouseout', function(d){
           //console.log('out');
           d3.select(this).attr('fill', d => {
-            return d3.interpolateHslLong("red", "blue")(colorScale2(dom2.indexOf(d.val)));
+            return d3.interpolateHslLong("#69b3a2", "blue")(colorScale2(dom2.indexOf(d.val)));
           });
           d3.select('#bar-tooltip').remove();
         });
@@ -460,10 +452,13 @@ function buildCount (data, attr){
     .attr('transform', 'translate(' + (margin.left + loc.x) + ', '+ margin.bottom +')' )
     .call(yAxis);
   
-  
+    // loc = {x:0, y:0, w:width, h:height}
+    // var w = loc.w - margin.left - margin.right;
+    // var h = loc.h - margin.top - margin.bottom;
+
     var legend = chart.append('g')
       .attr('id', 'legend');
-    var l = {x:loc.x + w + w/48, y:loc.y, w:w/3, h:(h/48)*dom2.length};
+    var l = {x:loc.x + w + w/100, y:loc.y, w:w/3, h:(h/48)*dom2.length};
     if(dom2.length < 25){l.h = l.h*2;}
     var legendScale = d3.scaleBand()
       .domain(dom2)
@@ -484,7 +479,7 @@ function buildCount (data, attr){
         return legendScale.bandwidth();
       })
       .attr("fill", d => {
-          return d3.interpolateHslLong("red", "blue")(colorScale2(dom2.indexOf(d)));
+          return d3.interpolateHslLong("#69b3a2", "blue")(colorScale2(dom2.indexOf(d)));
         });
     for(var i in dom2){
       legend.append('text')
