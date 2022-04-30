@@ -103,29 +103,29 @@ function buildCount (data, attr){
     return [margin, width, height];
     }
 
-    function swap(arr, i1, i2, idk){
+    function swap(arr, i1, i2){
         // console.log(arr);
         // console.log(arr[0]);
-        if(!idk){
         var t = arr[i1];
         arr[i1] = arr[i2];
         arr[i2] = t;
-        }
+        
     }
 
-    function catSort(att, dat, idk){
-      console.log(dat);
+    function catSort(att, dat){
+      //console.log(dat);
         if(!catOrder[att].ordered){
             return;
         }
         for(var i in dat){
             for(var j = 0; j < dat.length - i - 1; j++){
                 if(catOrder.compare(att, dat[j].val, dat[j+1].val)>0){
-                    console.log("swap in progress");
-                    swap(dat, j, j+1, idk);
+                    //console.log("swap in progress");
+                    swap(dat, j, j+1);
                 }
             }
         }
+        console.log(dat);
     }
   //--------------------------------------------------------------------------------------------------------------
   function buildaBarChart (loc, data, attr, svg){
@@ -139,7 +139,8 @@ function buildCount (data, attr){
     let att = attr.Xaxis;
     let c = buildCount(data,att);
     console.log(c);
-    catSort(att,c, false);
+    catSort(att,c);
+    //console.log(c);
     let dom = [];
     for(var i in c){
       dom.push(c[i].val);
@@ -250,7 +251,7 @@ function buildCount (data, attr){
     let att2 = attr.Yaxis;
     var c = buildClusterCount(data,att1,att2);
     for(var i in c){
-        catSort(att2, c[i].att, false);
+        catSort(att2, c[i].att);
     }
     catSort(att1, c, false);
     console.log(c);
