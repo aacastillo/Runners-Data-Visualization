@@ -85,7 +85,7 @@ function buildTrendGraph(a1, vis_div, data_url) {
                 .domain(d3.extent(data, function(d) {return d.date; }))
                 .range([ 0, width ]);
             svg.append("text")      // text label for the x axis
-                .attr("x", 265 )
+                .attr("x",width/2)
                 .attr("y",  height + margin.bottom)
                 .style("text-anchor", "middle")
                 .text("Date");
@@ -158,6 +158,28 @@ function buildScatterPlot(a1, a2, vis_div, data_url) {
         var x = d3.scaleLinear()
         .domain([0, 1.05 * data.reduce((prev, current) => Math.max(prev, current[a1]), 0)])
         .range([ 0, width ]);
+        //labels
+        var str1 = a1;
+        var str2 = a2;
+        if(Units[a1] != ''){
+            str1 += ('(' + Units[a1] + ')');
+        }
+        if(Units[a2] != ''){
+            str2 += ('(' + Units[a2] + ')');
+        }
+        svg.append("text")      // text label for the x axis
+                .attr("x",width/2)
+                .attr("y",  height + margin.bottom)
+                .style("text-anchor", "middle")
+                .text(str1);
+        svg.append("text")
+                .attr("transform", "rotate(-90)")
+                .attr("y", 0 - margin.left)
+                .attr("x",0 - (height / 2))
+                .attr("dy", "1em")
+                .style("text-anchor", "middle")
+                .text(str2);
+        //end labels
         svg.append("g")
         .attr("transform", "translate(0," + height + ")")
         .call(d3.axisBottom(x));
@@ -211,8 +233,33 @@ function buildWhiskerPlot(a1, a2, vis_div, data_url) {
             max = q3 + 1.5 * interQuantileRange
             return({q1: q1, median: median, q3: q3, interQuantileRange: interQuantileRange, min: min, max: max})
         })
-        .entries(data)
-
+        .entries(data);
+        //labels
+        var idk = "qunatitative";
+        var quan, qual;
+        if(AttributeType[a1] === idk){
+            quan = a1;
+            qual = a2;
+        }else{
+            quan = a2;
+            qual = a1;
+        }
+        if(Units[quan] != ''){
+            quan += ('(' + Units[quan] + ')');
+        }
+        svg.append("text")      // text label for the x axis
+                .attr("x",width/2)
+                .attr("y",  height + margin.bottom)
+                .style("text-anchor", "middle")
+                .text(qual);
+        svg.append("text")
+                .attr("transform", "rotate(-90)")
+                .attr("y", 0 - margin.left)
+                .attr("x",0 - (height / 2))
+                .attr("dy", "1em")
+                .style("text-anchor", "middle")
+                .text(quan);
+        //end of labels
         // Show the X scale
         var x = d3.scaleBand()
             .range([ 0, width ])

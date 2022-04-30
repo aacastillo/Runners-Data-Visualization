@@ -89,7 +89,7 @@ const CatOrder = {
 };
 
 const Units = {
-    "miles": "mi",
+    "miles": "",
     "time": "",
     "pace": "min/mile",
     "cal": "",
