@@ -29,6 +29,11 @@ html, body {
 .dropdown {
     margin: 10px;
 }
+.form-select {
+    background-color: darkslategrey;
+    color: white;
+    text-align: center;
+}
 .col {
     display: flex;
     flex-direction: column;

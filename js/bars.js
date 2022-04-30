@@ -156,12 +156,12 @@ function buildCount (data, attr){
 
   function catSort(att, dat, idk){
     console.log(dat);
-      if(!catOrder[att].ordered){
+      if(!CatOrder[att].ordered){
           return;
       }
       for(var i in dat){
           for(var j = 0; j < dat.length - i - 1; j++){
-              if(catOrder.compare(att, dat[j].val, dat[j+1].val)>0){
+              if(CatOrder.compare(att, dat[j].val, dat[j+1].val)>0){
                   console.log("swap in progress");
                   swap(dat, j, j+1, idk);
               }
@@ -170,7 +170,7 @@ function buildCount (data, attr){
   }
 
   //--------------------------------------------------------------------------------------------------------------
-  function buildaBarChart (loc, data, attr, svg){
+  function BuildaBarChart (loc, data, attr, svg){
     //
     //
     var chart = svg.append('g')
@@ -314,7 +314,7 @@ function buildCount (data, attr){
   }
   
   //Clusterrrrr---------------------------------------------
-  function buildaClusterBarChart(loc, data, attr,svg){
+  function BuildaClusterBarChart(loc, data, attr,svg){
     console.log(loc.y);
     let att1 = attr.Xaxis;
     let att2 = attr.Yaxis;
@@ -347,12 +347,12 @@ function buildCount (data, attr){
     var dom2 = [];
     for(var i in domt){
       dom2.push(i);
-      if(catOrder[att2].ordered){
+      if(CatOrder[att2].ordered){
         if(dom2.length === 0){
            continue;
         }
         for(var j = dom2.length - 1; j >= 0; j--){
-            if(catOrder.compare(att2, dom2[j], dom2[j-1])<0){
+            if(CatOrder.compare(att2, dom2[j], dom2[j-1])<0){
                swap(dom2, j, j-1);
              }else{
                   break;
@@ -386,7 +386,7 @@ function buildCount (data, attr){
 
     var colorScaleMax = 1;
     if(att2 != 'town'){
-    if(catOrder[att2].ordered){
+    if(CatOrder[att2].ordered){
         colorScaleMax = .5 + (1/dom2.length);
     }
     }
@@ -396,7 +396,7 @@ function buildCount (data, attr){
 
     
         colorScale2 = function(index){
-            if(att2 !='town' && catOrder[att2].ordered){
+            if(att2 !='town' && CatOrder[att2].ordered){
                 return colorScale(dom2[index]);
             }
             var l = dom2.length;
