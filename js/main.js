@@ -6,7 +6,7 @@ window.addEventListener('load', async () => {
 
     RenderDropdown("primary-var-dropdown");
 
-    const attributes1 = new Set(["conditions", "pace"]);
+    const attributes1 = new Set(["VO2", "VO2"]);
     RenderDropdown("single-vis-1-dropdown");
     MakeVisualization(attributes1, "single-vis-1");
 

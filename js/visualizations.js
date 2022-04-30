@@ -97,13 +97,17 @@ function buildTrendGraph(a1, vis_div, data_url) {
             var y = d3.scaleLinear()
                 .domain([0, d3.max(data, function(d) { return +d.value; })])
                 .range([ height, 0 ]);
+
+            if(Units[a1] != ''){
+                a1 += ('(' + Units[a1] + ')');
+            }
             svg.append("text")
                 .attr("transform", "rotate(-90)")
                 .attr("y", 0 - margin.left)
                 .attr("x",0 - (height / 2))
                 .attr("dy", "1em")
                 .style("text-anchor", "middle")
-                .text(a1 + "(min/mile)");
+                .text(a1);
             svg.append("g")
                 .call(d3.axisLeft(y));
 
