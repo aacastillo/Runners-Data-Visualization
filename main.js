@@ -112,16 +112,24 @@ const units = {
 */
 
 window.addEventListener('load', async () => {
-
+    //whiskerplot - const attributes = new Set(["conditions", "pace"]);
     //const attributes = new Set(["conditions"]);
     //const attributes = new Set(["mental","terrain"]);
-    // const attributes = new Set(["mental"]);
-    //const attributes = new Set(["pace"]);
+    //
 
-    makeVisualization(attributes);
+    const attributes1 = new Set(["conditions", "pace"]);
+    makeVisualization(attributes1, "single-vis-1");
+
+    const attributes2 = new Set(["miles", "pace"]);
+    makeVisualization(attributes2, "single-vis-2");
+
+    const attributes3 = new Set(["pace"]);
+    makeVisualization(attributes3, "single-vis-3");
+
+    const attributes4 = new Set(["mental","terrain"]);
+    makeVisualization(attributes4, "single-vis-4");
+
 });
-// EL: On page load, default visualization mileage trend graph
-// EL: On page load, load variable selection
 
 /* 
     *** 
@@ -129,13 +137,10 @@ window.addEventListener('load', async () => {
     ***
 */
 
-//makeVisualization(attributes: {}) => None
-function makeVisualization(attributes) {
-    removeOldVisualization();
+//makeVisualization(attributes: {}, vis_div: str) => None
+function makeVisualization(attributes, vis_div) {
 
-    console.log(attributes)
-
-    const vis_div = "#main-vis-wrapper"
+    removeOldVisualization(vis_div);
 
     //const data_url = 'C:/Users/dayle/OneDrive/Desktop/cs571/Runners-Data-Visualization';
     const data_url = 'https://raw.githubusercontent.com/aacastillo/Runners-Data/main/RunningData.csv';
@@ -158,21 +163,21 @@ function makeVisualization(attributes) {
 }
 
 //removeOldVisualization() => None
-function removeOldVisualization() {
-    let cur_vis_div = document.getElementById("main-vis-wrapper");
-    const parent_vis_div = document.getElementById("main-vis");
+function removeOldVisualization(vis_div) {
+    let cur_vis_div = document.getElementById(vis_div);
+    const parent_vis_div = document.getElementById(vis_div+"-wrapper");
     parent_vis_div.removeChild(cur_vis_div);
 
     let new_vis_div = document.createElement('div');
-    new_vis_div.setAttribute('id', 'main-vis-wrapper');
+    new_vis_div.setAttribute('id', vis_div);
+    new_vis_div.classList.add("vis");
     parent_vis_div.appendChild(new_vis_div);
 }
 
 //buildBarChart() => None
-function buildBarChart(a1, a2, vis_div, data_url) {
-    const [margin, width, height] = getDimensions();
-    var div = document.getElementById('main-vis-wrapper');
-    var svg = d3.select(div)
+function buildBarChart(a1, vis_div, data_url) {
+    const [margin, width, height] = getDimensions(vis_div);
+    var svg = d3.select("#"+vis_div)
     .append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
@@ -180,10 +185,7 @@ function buildBarChart(a1, a2, vis_div, data_url) {
     .attr("transform",
         "translate(" + margin.left + "," + margin.top + ")");
 
-
-    const data_url_actual = 'https://raw.githubusercontent.com/aacastillo/Runners-Data/main/RunningData.csv';
-    d3.csv(data_url_actual, function(data){
-        //console.log(data);
+    d3.csv(data_url, function(data){
         buildaBarChart({x:0, y:0, w:width, h:height}, data, {Xaxis: a1, Yaxis:""}, svg);
     })
 }
@@ -191,10 +193,10 @@ function buildBarChart(a1, a2, vis_div, data_url) {
 //buildTrendGraph => None
 function buildTrendGraph(a1, vis_div, data_url) {
     // set the dimensions and margins of the graph
-    const [margin, width, height] = getDimensions();
+    const [margin, width, height] = getDimensions(vis_div);
 
     // append the svg object to the body of the page
-    var svg = d3.select(vis_div)
+    var svg = d3.select("#"+vis_div)
         .append("svg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
@@ -206,13 +208,12 @@ function buildTrendGraph(a1, vis_div, data_url) {
 
         // format variables
         function(d){
-            //console.log(d.year + "/" + d.date)
             return { date : d3.timeParse("%Y/%m/%d")(d.year + "/" + d.date), value : d[a1] }
           },
         function(data) {
             // Add X axis --> it is a date format
             var x = d3.scaleTime()
-                .domain(d3.extent(data, function(d) { console.log(d.date); return d.date; }))
+                .domain(d3.extent(data, function(d) {return d.date; }))
                 .range([ 0, width ]);
             svg.append("text")      // text label for the x axis
                 .attr("x", 265 )
@@ -241,7 +242,7 @@ function buildTrendGraph(a1, vis_div, data_url) {
             svg.append("path")
                 .datum(data)
                 .attr("fill", "none")
-                .attr("stroke", "steelblue")
+                .attr("stroke", "#69b3a2")
                 .attr("stroke-width", 1.5)
                 .attr("d", d3.line()
                 .x(function(d) { return x(d.date) })
@@ -253,9 +254,8 @@ function buildTrendGraph(a1, vis_div, data_url) {
 
 //buildClusterBarChart => None
 function buildClusterBarChart(a1, a2, vis_div, data_url) {
-    const [margin, width, height] = getDimensions();
-    var div = document.getElementById('main-vis-wrapper');
-    var svg = d3.select(div)
+    const [margin, width, height] = getDimensions(vis_div);
+    var svg = d3.select("#"+vis_div)
     .append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
@@ -264,22 +264,18 @@ function buildClusterBarChart(a1, a2, vis_div, data_url) {
         "translate(" + margin.left + "," + margin.top + ")");
 
 
-    const data_url_actual = 'https://raw.githubusercontent.com/aacastillo/Runners-Data/main/RunningData.csv';
-    d3.csv(data_url_actual, function(data){
-        //console.log(data);
+    d3.csv(data_url, function(data){
         buildaClusterBarChart({x:0, y:0, w:width, h:height}, data, {Xaxis: a1, Yaxis:a2}, svg);
     })
 }
 
 //buildScatterPlot => None
 function buildScatterPlot(a1, a2, vis_div, data_url) {
-    console.log("Build Scatter Plot")
-
     // set the dimensions and margins of the graph
-    const [margin, width, height] = getDimensions();
+    const [margin, width, height] = getDimensions(vis_div);
 
     // append the svg object to the body of the page
-    var svg = d3.select(vis_div)
+    var svg = d3.select("#" + vis_div)
         .append("svg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
@@ -321,10 +317,10 @@ function buildScatterPlot(a1, a2, vis_div, data_url) {
 //buildWhiskerPlot(a1: categorical string, a2: quantitative string) => None
 function buildWhiskerPlot(a1, a2, vis_div, data_url) {
     // set the dimensions and margins of the graph
-    const [margin, width, height] = getDimensions();
+    const [margin, width, height] = getDimensions(vis_div);
 
     // append the svg object to the body of the page
-    var svg = d3.select(vis_div)
+    var svg = d3.select("#"+vis_div)
     .append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
@@ -372,7 +368,7 @@ function buildWhiskerPlot(a1, a2, vis_div, data_url) {
             .append("line")
                 .attr("x1", function(d){return(x(d.key))})
                 .attr("x2", function(d){return(x(d.key))})
-                .attr("y1", function(d){console.log(d.value);return(y(d.value.min))})
+                .attr("y1", function(d){return(y(d.value.min))})
                 .attr("y2", function(d){return(y(d.value.max))})
                 .attr("stroke", "black")
                 .style("width", 40)
@@ -406,11 +402,10 @@ function buildWhiskerPlot(a1, a2, vis_div, data_url) {
     })
 }
 
-function getDimensions() {
-    const main_vis = document.getElementById("main-vis-wrapper");
-    var margin = {top: 50, right: 90, bottom: 50, left: 100},
+function getDimensions(vis_div) {
+    const main_vis = document.getElementById(vis_div);
+    var margin = {top: 50, right: 50, bottom: 50, left: 50},
     width = main_vis.offsetWidth - margin.left - margin.right,
     height = main_vis.offsetHeight - margin.top - margin.bottom;
-    console.log(width, height);
     return [margin, width, height];
 }
