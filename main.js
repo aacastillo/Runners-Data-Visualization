@@ -116,11 +116,12 @@ window.addEventListener('load', async () => {
     //const attributes = new Set(["conditions"]);
     //const attributes = new Set(["mental","terrain"]);
     //const attributes = new Set(["mental"]);
-    //const attributes = new Set(["pace"]);
-    const attributes0 = new Set(["miles", "pace"]);
-    makeVisualization(attributes0, "single-vis-2");
+    
     const attributes1 = new Set(["conditions", "pace"]);
     makeVisualization(attributes1, "single-vis-1");
+
+    const attributes2 = new Set(["miles", "pace"]);
+    makeVisualization(attributes2, "single-vis-2");
 
 });
 // EL: On page load, default visualization mileage trend graph
@@ -135,7 +136,6 @@ window.addEventListener('load', async () => {
 //makeVisualization(attributes: {}, vis_div: str) => None
 function makeVisualization(attributes, vis_div) {
 
-    console.log(attributes)
     removeOldVisualization(vis_div);
 
     //const data_url = 'C:/Users/dayle/OneDrive/Desktop/cs571/Runners-Data-Visualization';
@@ -278,7 +278,7 @@ function buildScatterPlot(a1, a2, vis_div, data_url) {
     console.log("Build Scatter Plot")
 
     // set the dimensions and margins of the graph
-    const [margin, width, height] = getDimensions();
+    const [margin, width, height] = getDimensions(vis_div);
 
     // append the svg object to the body of the page
     var svg = d3.select("#" + vis_div)
@@ -410,10 +410,8 @@ function buildWhiskerPlot(a1, a2, vis_div, data_url) {
 
 function getDimensions(vis_div) {
     const main_vis = document.getElementById(vis_div);
-    var margin = {top: 50, right: 90, bottom: 50, left: 100},
+    var margin = {top: 50, right: 50, bottom: 50, left: 50},
     width = main_vis.offsetWidth - margin.left - margin.right,
     height = main_vis.offsetHeight - margin.top - margin.bottom;
-    console.log(main_vis.offsetWidth, main_vis.offsetHeight)
-    console.log(width, height);
     return [margin, width, height];
 }
