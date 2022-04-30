@@ -55,7 +55,7 @@ function buildBarChart(a1, vis_div, data_url) {
         "translate(" + margin.left + "," + margin.top + ")");
 
     d3.csv(data_url, function(data){
-        BuildaBarChart({x:0, y:0, w:width, h:height}, data, {Xaxis: a1, Yaxis:""}, svg);
+        BuildaBarChart({x:0, y:0, w:width, h:height}, data, {Xaxis: a1, Yaxis:""}, svg, "#"+vis_div);
     })
 }
 
