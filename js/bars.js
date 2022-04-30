@@ -5,7 +5,7 @@ function buildCount (data, attr){
       data = townFix(data, 'year');
       attr = 'town';
     }
-    console.log(data,attr);
+    //console.log(data,attr);
     for(let i = 0; i < data.length; i++){
       let v = data[i][attr];
       if(v === "" || v === undefined){
@@ -30,7 +30,7 @@ function buildCount (data, attr){
     for(var j in r){
       res.push({val: j, count: r[j]});
     }
-    console.log(res);
+    //console.log(res);
     return res;
   }
   
@@ -182,7 +182,7 @@ function buildCount (data, attr){
     
     let att = attr.Xaxis;
     let c = buildCount(data,att);
-    console.log(c);
+    //console.log(c);
     catSort(att,c);
     //console.log(c);
     let dom = [];
@@ -226,7 +226,7 @@ function buildCount (data, attr){
       .attr('x', function(d) {
           return bandScale(d.val);
       })
-    .attr('y', function(d){console.log('here',d.count); return h - countScale(d.count) - 0*margin.bottom + loc.y;
+    .attr('y', function(d){return h - countScale(d.count) - 0*margin.bottom + loc.y;
     })
       .attr('width', bandScale.bandwidth())
       .attr('height', function(d) {
@@ -485,7 +485,7 @@ function buildCount (data, attr){
           //console.log("hoverrr");		
 
           d3.select(this).attr('fill', 'lightgray');
-          console.log(w/3+15);
+          //console.log(w/3+15);
         	g[0].append('g').attr('id', 'bar-tooltip').append('rect')
           .attr("x", bandScale(c[0].val) + 2)
           .attr('y', margin.top + loc.y)

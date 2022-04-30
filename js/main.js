@@ -10,7 +10,7 @@ window.addEventListener('load', async () => {
     RenderDropdown("single-vis-1-dropdown");
     MakeVisualization(attributes1, "single-vis-1");
 
-    const attributes2 = new Set(["VO2", "heart rate"]);
+    const attributes2 = new Set(["time", "heart rate"]);
     RenderDropdown("single-vis-2-dropdown");
     MakeVisualization(attributes2, "single-vis-2");
 
