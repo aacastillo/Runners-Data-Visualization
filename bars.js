@@ -1,9 +1,14 @@
 function buildCount (data, attr){
     var mil = true;
     let r = {};
+    if(attr === 'towns'){
+      data = townFix(data, 'year');
+      attr = 'town';
+    }
+    console.log(data,attr);
     for(let i = 0; i < data.length; i++){
       let v = data[i][attr];
-      if(v === ""){
+      if(v === "" || v === undefined){
           continue;
       }
       if(r[v] >= 0){
@@ -25,15 +30,22 @@ function buildCount (data, attr){
     for(var j in r){
       res.push({val: j, count: r[j]});
     }
-    //console.log(res);
+    console.log(res);
     return res;
   }
   
   function buildClusterCount(data, att1, att2){
     var mil = true;
     let r = {}
+    if(att1 === 'towns'){
+      data = townFix(data, att2);
+      att1 = 'town';
+    }
+    if(att2 === 'towns'){
+      data = townFix(data, att1);
+      att2 = 'town';
+    }
     for(var i in data){
-      //console.log(att1,att2);
       let v = data[i][att1];
       let x = data[i][att2];
       if(v === "" || x === "" || v === undefined || x === undefined){
@@ -75,6 +87,44 @@ function buildCount (data, attr){
       res.push({val: j, att: tempArr});
     }
     return res;
+  }
+
+  function hasChar(str, c){
+    for(var i in str){
+      if(str[i] === c){
+        return true;
+      }
+    }
+    return false;
+  }
+
+  //returns [{town:Hadley}, ...]
+  function townFix(d, att2){
+    console.log(d.length);
+    var r = [];
+    for(var i in d){
+      var twn = d[i].towns;
+      if(twn != '' ){
+        //console.log(i);
+        if(!hasChar(twn,',')){
+        r[r.push({'town': twn, 'miles': d[i].miles}) - 1][att2] = d[i][att2];
+      }else{
+
+      var cur = "";
+      for(var j in twn){
+        if(twn[j] === ','){
+          //console.log(i,cur);
+          r[r.push({'town': cur, 'miles': d[i].miles}) - 1][att2] = d[i][att2];;
+          cur = '';
+        }else if(twn[j] != ' '){
+          cur += twn[j];
+        }
+      }
+
+    }
+    }
+    }
+    return r;
   }
   
   function maxCount(d){
@@ -127,6 +177,8 @@ function buildCount (data, attr){
       .attr('class', 'chart')
     /*const margin = { left: loc.w/10, right: loc.w/10, top: loc.h/10, bottom: loc.h/10 }; */
     const margin = {left:0,right:0, top:0, bottom:0};
+
+    
     
     let att = attr.Xaxis;
     let c = buildCount(data,att);
@@ -138,7 +190,9 @@ function buildCount (data, attr){
       dom.push(c[i].val);
     }
     maxC = maxCount(c);
-
+    if(dom.length > 15){
+      margin.bottom = loc.h/8;
+    }
 
     var w = loc.w - margin.left - margin.right;
     var h = loc.h - margin.top - margin.bottom;
@@ -172,7 +226,7 @@ function buildCount (data, attr){
       .attr('x', function(d) {
           return bandScale(d.val);
       })
-    .attr('y', function(d){return h - countScale(d.count) + margin.bottom + loc.y;
+    .attr('y', function(d){console.log('here',d.count); return h - countScale(d.count) - 0*margin.bottom + loc.y;
     })
       .attr('width', bandScale.bandwidth())
       .attr('height', function(d) {
@@ -185,24 +239,27 @@ function buildCount (data, attr){
 
         	g.append('g').attr('id', 'bar-tooltip').append('rect')
           .attr("x", bandScale(c[0].val) + 2)
-          .attr('y', margin.bottom + loc.y)
-          .attr('width', w/4)
-          .attr('height', h/10)
+          .attr('y', margin.top + loc.y)
+          .attr('width', w/4+20)
+          .attr('height', h/5)
           .attr('fill', 'lightgray');
           d3.select('#bar-tooltip')
           .append('text').text("Miles run where")
           .attr('x', bandScale(c[0].val) + 10)
-          .attr('y', margin.bottom + loc.y + 10)
+          .attr('y', margin.top + loc.y + 10)
           .attr('font-size', '8');
+          if(att === 'towns'){
+            att = 'town';
+          }
           d3.select('#bar-tooltip')
           .append('text').text(att + " is " + d.val + ": ")
           .attr('x', bandScale(c[0].val) + 10)
-          .attr('y', margin.bottom + loc.y + 20)
+          .attr('y', margin.top + loc.y + 20)
           .attr('font-size', '8');
           d3.select('#bar-tooltip')
           .append('text').text(Math.round(d.count * 100) / 100)
           .attr('x', bandScale(c[0].val) + 10)
-          .attr('y', margin.bottom + loc.y + 30)
+          .attr('y', margin.top + loc.y + 30)
           .attr('font-size', '8')
           
           //.attr('cols', '10');
@@ -220,7 +277,17 @@ function buildCount (data, attr){
     .scale(bandScale);
     var xAxisEl = chart.append('g')
       .attr('transform', `translate(0, ${loc.h + loc.y - margin.bottom})`)
-      .call(xAxis);
+      .call(xAxis)
+      ;
+     if(dom.length > 11 && att != 'month'){
+      xAxisEl.selectAll('text')
+      .attr("y", 0)
+      .attr("x", 9)
+      .attr("dy", ".35em")
+      .attr("transform", "rotate(90)")
+      .style("text-anchor", "start")
+      .style('font-size', 5);
+     } 
   
     var yAxis = d3.axisLeft().scale(countScale2)
       .ticks(4);
@@ -234,6 +301,16 @@ function buildCount (data, attr){
     .attr("y", -10)
     .attr('x', 0)
     .text("Miles");
+    var labeloffset = 35;
+    if(dom.length > 11 && att != 'month'){
+      labeloffset = 50;
+    }
+    svg.append("text")
+    .attr("class", "x label")
+    .attr("text-anchor", "middle")
+    .attr("y", h+labeloffset)
+    .attr('x', w/2)
+    .text(att);
   }
   
   //Clusterrrrr---------------------------------------------
@@ -246,12 +323,14 @@ function buildCount (data, attr){
         catSort(att2, c[i].att);
     }
     catSort(att1, c, false);
-    console.log(c);
-  
+    //console.log(c);
+    // if(att2 === 'towns'){
+    //   att2 = 'town';
+    // }
     var chart = svg.append('g')
       .attr('class', 'chart');
     //const margin = { left: loc.w/10, right: loc.w/10, top: loc.h/10, bottom: loc.h/10 };
-    const margin = {left:0,right:0, top:0, bottom:0};
+    const margin = {left:0,right:loc.w/15, top:0, bottom:0};
     //put domains in array form
     let dom1 = [];
     for(var i in c){
@@ -281,9 +360,14 @@ function buildCount (data, attr){
         }
       }
     }
+    if(dom1.length > 15){
+      margin.bottom = loc.h/8;
+    }
     
     var w = loc.w - margin.left - margin.right;
     var h = loc.h - margin.top - margin.bottom;
+
+    
   
     //make scales
     var bandScale = d3.scaleBand()
@@ -294,24 +378,25 @@ function buildCount (data, attr){
     var maxC = maxClusterCount(c);
     
     var countScale = d3.scaleLinear()
-      .domain([0, Math.round(maxC*4/3)])
+      .domain([0, Math.round(maxC*3/2)])
       .range([0, h]);
     var countScale2 = d3.scaleLinear()
-      .domain([0, Math.round(maxC*4/3)])
-      .range([h + loc.y, loc.y]);
+      .domain([0, Math.round(maxC*3/2)])
+      .range([h+margin.top,margin.top]);
 
     var colorScaleMax = 1;
+    if(att2 != 'town'){
     if(catOrder[att2].ordered){
         colorScaleMax = .5 + (1/dom2.length);
     }
-  
+    }
     var colorScale = d3.scaleBand()
       .domain(dom2)
       .range([0, colorScaleMax]);
 
     
         colorScale2 = function(index){
-            if(catOrder[att2].ordered){
+            if(att2 !='town' && catOrder[att2].ordered){
                 return colorScale(dom2[index]);
             }
             var l = dom2.length;
@@ -372,6 +457,7 @@ function buildCount (data, attr){
     const g = [];
     for(var j in c){
       g[j] = chart.append('g');
+      const f = j;
       //setup cluster scale
       var innerScale = d3.scaleBand()
       .domain(dom2)
@@ -386,7 +472,7 @@ function buildCount (data, attr){
       .attr('x', function(d) {
             return innerScale(d.val);
         })
-      .attr('y', function(d){return h - countScale(d.count) + margin.bottom + loc.y;
+      .attr('y', function(d){return h - countScale(d.count) + 0*margin.bottom + loc.y;
       })
         .attr('width', innerScale.bandwidth())
         .attr('height', function(d) {
@@ -402,30 +488,37 @@ function buildCount (data, attr){
 
         	g[0].append('g').attr('id', 'bar-tooltip').append('rect')
           .attr("x", bandScale(c[0].val) + 2)
-          .attr('y', margin.bottom + loc.y)
-          .attr('width', w/4)
-          .attr('height', h/10)
+          .attr('y', margin.top + loc.y)
+          .attr('width', w/3 + 15)
+          .attr('height', h/4)
           .attr('fill', 'lightgray');
           //text
           d3.select('#bar-tooltip')
           .append('text').text("Miles run where")
           .attr('x', bandScale(c[0].val) + 10)
-          .attr('y', margin.bottom + loc.y + 10)
+          .attr('y', margin.top + loc.y + 10)
           .attr('font-size', '8');
+          if(att1 === 'towns'){
+            att1 = 'town';
+          }
+          if(att2 === 'towns'){
+            att2 = 'town';
+          }
+
           d3.select('#bar-tooltip')
-          .append('text').text(att1 + " is " + c[j].val)
+          .append('text').text(att1 + " is " + c[f].val)
           .attr('x', bandScale(c[0].val) + 10)
-          .attr('y', margin.bottom + loc.y + 20)
+          .attr('y', margin.top + loc.y + 20)
           .attr('font-size', '8');
           d3.select('#bar-tooltip')
           .append('text').text("and " + att2 + " is " + d.val + ": ")
           .attr('x', bandScale(c[0].val) + 10)
-          .attr('y', margin.bottom + loc.y + 30)
+          .attr('y', margin.top + loc.y + 30)
           .attr('font-size', '8');
           d3.select('#bar-tooltip')
           .append('text').text(Math.round(d.count * 100) / 100)
           .attr('x', bandScale(c[0].val) + 10)
-          .attr('y', margin.bottom + loc.y + 40)
+          .attr('y', margin.top + loc.y + 40)
           .attr('font-size', '8')
           
           //.attr('cols', '10');
@@ -446,11 +539,20 @@ function buildCount (data, attr){
     var xAxisEl = chart.append('g')
       .attr('transform', `translate(0, ${loc.h + loc.y - margin.bottom})`)
       .call(xAxis);
+      if(dom1.length > 11 && att1 != 'month'){
+        xAxisEl.selectAll('text')
+        .attr("y", 0)
+        .attr("x", 9)
+        .attr("dy", ".35em")
+        .attr("transform", "rotate(90)")
+        .style("text-anchor", "start")
+        .style('font-size', 5);
+       } 
     var yAxis = d3.axisLeft().scale(countScale2)
       .ticks(4);
-    var yAxisEl = chart.append('g')
-    .attr('transform', 'translate(' + (margin.left + loc.x) + ', '+ margin.bottom +')' )
-    .call(yAxis);
+      var yAxisEl = chart.append('g')
+      .attr('transform', 'translate(' + (margin.left + loc.x) + ',' + loc.y+ ')' )
+      .call(yAxis);
   
     // loc = {x:0, y:0, w:width, h:height}
     // var w = loc.w - margin.left - margin.right;
@@ -458,7 +560,7 @@ function buildCount (data, attr){
 
     var legend = chart.append('g')
       .attr('id', 'legend');
-    var l = {x:loc.x + w + w/100, y:loc.y, w:w/3, h:(h/48)*dom2.length};
+    var l = {x:loc.x + w + w/100, y:loc.y, w:w/3, h:(h/40)*dom2.length};
     if(dom2.length < 25){l.h = l.h*2;}
     var legendScale = d3.scaleBand()
       .domain(dom2)
@@ -481,12 +583,20 @@ function buildCount (data, attr){
       .attr("fill", d => {
           return d3.interpolateHslLong("#69b3a2", "blue")(colorScale2(dom2.indexOf(d)));
         });
+      var font = 7;
+    if(dom2.length > 25){
+      font = 5;
+    }
     for(var i in dom2){
       legend.append('text')
       .attr('x', l.x + l.w/9)
       .attr('y', legendScale(dom2[i])+ (0.75*l.h / dom2.length))
-      .attr('font-size', '9')
+      .attr('font-size', font)
       .text(dom2[i]);
+    }
+    var labeloffset = 35;
+    if(dom1.length > 11 && att1 != 'month'){
+      labeloffset = 48;
     }
 
     svg.append("text")
@@ -495,6 +605,12 @@ function buildCount (data, attr){
     .attr("y", -10)
     .attr('x', 0)
     .text("Miles");
+    svg.append("text")
+    .attr("class", "x label")
+    .attr("text-anchor", "middle")
+    .attr("y", h+labeloffset)
+    .attr('x', w/2)
+    .text(att1);
     
   }
   

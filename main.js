@@ -116,7 +116,7 @@ window.addEventListener('load', async () => {
     //const attributes = new Set(["conditions"]);
     //const attributes = new Set(["mental","terrain"]);
 
-
+    
     //
 
     const attributes1 = new Set(["conditions", "pace"]);
@@ -125,10 +125,10 @@ window.addEventListener('load', async () => {
     const attributes2 = new Set(["miles", "pace"]);
     makeVisualization(attributes2, "single-vis-2");
 
-    const attributes3 = new Set(["pace"]);
+    const attributes3 = new Set(["season"]);
     makeVisualization(attributes3, "single-vis-3");
 
-    const attributes4 = new Set(["mental","terrain"]);
+    const attributes4 = new Set(["season","mental"]);
     makeVisualization(attributes4, "single-vis-4");
 
 
@@ -189,6 +189,7 @@ function buildBarChart(a1, vis_div, data_url) {
         "translate(" + margin.left + "," + margin.top + ")");
 
     d3.csv(data_url, function(data){
+        townFix(data);
         buildaBarChart({x:0, y:0, w:width, h:height}, data, {Xaxis: a1, Yaxis:""}, svg);
     })
 }
