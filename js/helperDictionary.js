@@ -102,4 +102,11 @@ const Units = {
     "hour": "",
     "people": "",
     "temp": "degrees F",
+    "apply": function(att, str){
+        if(AttributeType[att] === 'qualitative' || this[att] === ''){
+            return str;
+        }
+        return str + '(' + this[att] + ')';
+    }
 };
+

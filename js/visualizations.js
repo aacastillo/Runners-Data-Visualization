@@ -163,26 +163,18 @@ function buildScatterPlot(a1, a2, vis_div, data_url) {
         .domain([0, 1.05 * data.reduce((prev, current) => Math.max(prev, current[a1]), 0)])
         .range([ 0, width ]);
         //labels
-        var str1 = a1;
-        var str2 = a2;
-        if(Units[a1] != ''){
-            str1 += ('(' + Units[a1] + ')');
-        }
-        if(Units[a2] != ''){
-            str2 += ('(' + Units[a2] + ')');
-        }
         svg.append("text")      // text label for the x axis
                 .attr("x",width/2)
                 .attr("y",  height + margin.bottom - 10)
                 .style("text-anchor", "middle")
-                .text(str1);
+                .text(Units.apply(a1,a1));
         svg.append("text")
                 .attr("transform", "rotate(-90)")
                 .attr("y", 0 - margin.left)
                 .attr("x",0 - (height / 2))
                 .attr("dy", "1em")
                 .style("text-anchor", "middle")
-                .text(str2);
+                .text(Units.apply(a2,a2));
         //end labels
         svg.append("g")
         .attr("transform", "translate(0," + height + ")")
@@ -216,10 +208,11 @@ function buildScatterPlot(a1, a2, vis_div, data_url) {
           .style("opacity", 1)
       }
       var mousemove = function(d) {
-        console.log('hello?')
+        //console.log('hello?')
         var adjust = tooltipAdjust(vis_div, window.innerWidth, window.innerHeight);
+        
         Tooltip
-          .html(a1+': ' + Math.round(d[a1] * 100) / 100 + " <br>" + a2 +': ' + Math.round(d[a2] * 100) / 100)
+          .html(a1+': ' + Units.apply(a1,Math.round(d[a1] * 100) / 100) + " <br>" + a2 +': ' + Units.apply(a2,Math.round(d[a2] * 100) / 100))
           .style("left", (d3.mouse(this)[0]+adjust[0]) + "px")
           .style("top", (d3.mouse(this)[1] + adjust[1]) + "px")
           .style("opacity", 1)
