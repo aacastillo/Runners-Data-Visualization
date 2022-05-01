@@ -1,3 +1,5 @@
+const VIDS = ["single-vis-1", "single-vis-2", "single-vis-3", "single-vis-4"];
+
 const AttributeType = {
     "miles": "quantitative",
     "time": "quantitative",

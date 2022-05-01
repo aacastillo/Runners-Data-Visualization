@@ -1,368 +1,357 @@
 function buildCount (data, attr){
-    var mil = true;
-    let r = {};
-    if(attr === 'towns'){
-      data = townFix(data, 'year');
-      attr = 'town';
+  var mil = true;
+  let r = {};
+  if(attr === 'towns'){
+    data = townFix(data, 'year');
+    attr = 'town';
+  }
+  for(let i = 0; i < data.length; i++){
+    let v = data[i][attr];
+    if(v === "" || v === undefined){
+        continue;
     }
-    //console.log(data,attr);
-    for(let i = 0; i < data.length; i++){
-      let v = data[i][attr];
-      if(v === "" || v === undefined){
-          continue;
+    if(r[v] >= 0){
+      if(mil){
+          r[v] += parseFloat(data[i].miles);
+      }else{
+          r[v]++
       }
-      if(r[v] >= 0){
-        if(mil){
-            r[v] += parseFloat(data[i].miles);
-        }else{
-            r[v]++
-        }
+    }else{
+      if(mil){
+            r[v] = parseFloat(data[i].miles);
+      }else{
+            r[v] = 1;
+      }
+    }
+  }
+  //console.log(r);
+  let res = [];
+  for(var j in r){
+    res.push({val: j, count: r[j]});
+  }
+  return res;
+}
+  
+function buildClusterCount(data, att1, att2){
+  var mil = true;
+  let r = {}
+  if(att1 === 'towns'){
+    data = townFix(data, att2);
+    att1 = 'town';
+  }
+  if(att2 === 'towns'){
+    data = townFix(data, att1);
+    att2 = 'town';
+  }
+  for(var i in data){
+    let v = data[i][att1];
+    let x = data[i][att2];
+    if(v === "" || x === "" || v === undefined || x === undefined){
+      continue;
+    }
+    if(r[v] != undefined){
+      r[v].total++;
+      if(r[v][x] >= 0){
+          if(mil){
+              r[v][x] += parseFloat(data[i].miles);
+          }else{
+              r[v][x]++
+          }
       }else{
           if(mil){
-                r[v] = parseFloat(data[i].miles);
-          }else{
-                r[v] = 1;
-          }
-      }
-    }
-    //console.log(r);
-    let res = [];
-    for(var j in r){
-      res.push({val: j, count: r[j]});
-    }
-    //console.log(res);
-    return res;
-  }
-  
-  function buildClusterCount(data, att1, att2){
-    var mil = true;
-    let r = {}
-    if(att1 === 'towns'){
-      data = townFix(data, att2);
-      att1 = 'town';
-    }
-    if(att2 === 'towns'){
-      data = townFix(data, att1);
-      att2 = 'town';
-    }
-    for(var i in data){
-      let v = data[i][att1];
-      let x = data[i][att2];
-      if(v === "" || x === "" || v === undefined || x === undefined){
-        continue;
-      }
-      if(r[v] != undefined){
-        r[v].total++;
-        if(r[v][x] >= 0){
-            if(mil){
-                r[v][x] += parseFloat(data[i].miles);
-            }else{
-                r[v][x]++
-            }
+              r[v][x] = parseFloat(data[i].miles)
+              r[v]['outer'] = v;
         }else{
-            if(mil){
-                r[v][x] = parseFloat(data[i].miles)
-                r[v]['outer'] = v;
-          }else{
-                r[v][x] = 1;
-          }
+              r[v][x] = 1;
         }
+      }
+    }else{
+      r[v] = {total: 1};
+      if(mil){
+          r[v][x] = parseFloat(data[i].miles);
       }else{
-        r[v] = {total: 1};
-        if(mil){
-            r[v][x] = parseFloat(data[i].miles);
-        }else{
-            r[v][x] = 1;
-      }
-      }
+          r[v][x] = 1;
     }
-    //console.log(r);
-    var res = [];
-    for(var j in r){
-      var tempArr = [];
-      for(var i in r[j]){
-        if(i != "total" && i != 'outer'){
-          tempArr.push({val: i, count: r[j][i], outer: r[j].outer});
-        }
-      }
-      res.push({val: j, att: tempArr});
     }
-    //console.log(res);
-    return res;
   }
-
-  function hasChar(str, c){
-    for(var i in str){
-      if(str[i] === c){
-        return true;
+  //console.log(r);
+  var res = [];
+  for(var j in r){
+    var tempArr = [];
+    for(var i in r[j]){
+      if(i != "total" && i != 'outer'){
+        tempArr.push({val: i, count: r[j][i], outer: r[j].outer});
       }
     }
-    return false;
+    res.push({val: j, att: tempArr});
   }
+  //console.log(res);
+  return res;
+}
 
-  //returns [{town:Hadley}, ...]
-  function townFix(d, att2){
-    //console.log(d.length);
-    var r = [];
-    for(var i in d){
-      var twn = d[i].towns;
-      if(twn != '' ){
-        //console.log(i);
-        if(!hasChar(twn,',')){
+function hasChar(str, c){
+  for(var i in str){
+    if(str[i] === c){
+      return true;
+    }
+  }
+  return false;
+};
+
+// returns [{town:Hadley}, ...]
+function townFix(d, att2){
+  var r = [];
+  for(var i in d){
+    var twn = d[i].towns;
+    if(twn != '' ){
+      if(!hasChar(twn,',')){
         r[r.push({'town': twn, 'miles': d[i].miles}) - 1][att2] = d[i][att2];
       }else{
-
-      var cur = "";
-      for(var j in twn){
-        if(twn[j] === ','){
-          //console.log(i,cur);
-          r[r.push({'town': cur, 'miles': d[i].miles}) - 1][att2] = d[i][att2];
-          cur = '';
-        }else if(twn[j] != ' '){
-          cur += twn[j];
+        var cur = "";
+        for(var j in twn){
+          if(twn[j] === ','){
+            r[r.push({'town': cur, 'miles': d[i].miles}) - 1][att2] = d[i][att2];;
+            cur = '';
+          }else if(twn[j] != ' '){
+            cur += twn[j];
+          }
         }
       }
-
     }
-    }
-    }
-    return r;
   }
+  return r;
+}
 
-  function townFix2(d, att2){
-    var r = [];
-    for(var i in d){
-      var twn = d[i].towns;
-      if(twn != '' ){
-        //console.log(i);
-        if(!hasChar(twn,',')){
-          r[r.push({'town': twn}) - 1][att2] = d[i][att2];
-        }else{
+function townFix2(d, att2){
+  var r = [];
+  for(var i in d){
+    var twn = d[i].towns;
+    if(twn != '' ){
+      //console.log(i);
+      if(!hasChar(twn,',')){
+        r[r.push({'town': twn}) - 1][att2] = d[i][att2];
+      }else{
 
-          var cur = "";
-          for(var j in twn){
-            if(twn[j] === ','){
-              //console.log(i,cur);
-              r[r.push({'town': cur}) - 1][att2] = d[i][att2];
-              cur = '';
-            }else if(twn[j] != ' '){
-              cur += twn[j];
+        var cur = "";
+        for(var j in twn){
+          if(twn[j] === ','){
+            //console.log(i,cur);
+            r[r.push({'town': cur}) - 1][att2] = d[i][att2];
+            cur = '';
+          }else if(twn[j] != ' '){
+            cur += twn[j];
+          }
+        }
+      } 
+    }
+  }
+  return r;
+}
+  
+function maxCount(d){
+  let max = 0;
+  for(var i in d){
+    max = Math.max(max, d[i].count);
+  }
+  return max;
+}
+  
+function maxClusterCount(d){
+  var max = 0;
+  for(var i in d){
+    //console.log(d[i]);
+    max = Math.max(max, maxCount(d[i].att))
+  }
+  return max;
+}
+
+function swap(arr, i1, i2){
+    // console.log(arr);
+    // console.log(arr[0]);
+
+    var t = arr[i1];
+    arr[i1] = arr[i2];
+    arr[i2] = t;
+    
+}
+
+function catSort(att, dat, idk){
+    if(!CatOrder[att].ordered){
+        return;
+    }
+    for(var i in dat){
+        for(var j = 0; j < dat.length - i - 1; j++){
+            if(CatOrder.compare(att, dat[j].val, dat[j+1].val)>0){
+                swap(dat, j, j+1, idk);
             }
-          }
-        } 
-      }
+        }
     }
-    return r;
+}
+
+function tooltipAdjust(visdivID, w, h){
+  var divNumber = parseInt(visdivID[visdivID.length - 1]);
+  if(divNumber === 1){
+    return [0,Math.round(57.58) - 15];
   }
-  
-  function maxCount(d){
-    let max = 0;
-    for(var i in d){
-      max = Math.max(max, d[i].count);
-    }
-    return max;
+  if(divNumber === 2){
+    return [0,Math.round(.4*h + 1*57.58)];
   }
+  if(divNumber === 3){
+    return [Math.round(w/2),Math.round(57) - 20];
+  }
+  if(divNumber === 4){
+    return [Math.round(w/2),Math.round(.4*h + 1* 57.58)];
+  }
+}
   
-  function maxClusterCount(d){
-    var max = 0;
-    for(var i in d){
-      //console.log(d[i]);
-      max = Math.max(max, maxCount(d[i].att))
-    }
-    return max;
+//--------------------------------------------------------------------------------------------------------------
+function BuildaBarChart (loc, data, attr, svg, visdivID){
+  //
+  //
+  var chart = svg.append('g')
+    .attr('class', 'chart')
+  /*const margin = { left: loc.w/10, right: loc.w/10, top: loc.h/10, bottom: loc.h/10 }; */
+  const margin = {left:0,right:0, top:0, bottom:0};
+
+  
+  
+  let att = attr.Xaxis;
+  let c = buildCount(data,att);
+  catSort(att,c);
+  //console.log(c);
+  let dom = [];
+  for(var i in c){
+    dom.push(c[i].val);
+  }
+  maxC = maxCount(c);
+  if(dom.length > 15){
+    margin.bottom = loc.h/8;
   }
 
-  function swap(arr, i1, i2){
-      // console.log(arr);
-      // console.log(arr[0]);
+  var w = loc.w - margin.left - margin.right;
+  var h = loc.h - margin.top - margin.bottom;
+  //scales
+  var bandScale = d3.scaleBand()
+    .domain(dom)
+    .range([margin.left + loc.x, w + + loc.x])
+    .paddingInner(0.05);
 
-      var t = arr[i1];
-      arr[i1] = arr[i2];
-      arr[i2] = t;
-      
-  }
+  var countScale = d3.scaleLinear()
+    .domain([0, Math.round(maxC*4/3)])
+    .range([0,h]);
+  var countScale2 = d3.scaleLinear()
+    .domain([0, Math.round(maxC*4/3)])
+    .range([h+margin.top,margin.top]);
 
-  function catSort(att, dat){
-    //console.log(dat);
-      if(!CatOrder[att].ordered){
-          return;
-      }
-      for(var i in dat){
-          for(var j = 0; j < dat.length - i - 1; j++){
-              if(CatOrder.compare(att, dat[j].val, dat[j+1].val)>0){
-                  //console.log("swap in progress");
-                  swap(dat, j, j+1);
-              }
-          }
-      }
-  }
+  const g = chart.append('g');
+
+
+  var div = d3.select("svg").append("div")	
+  .attr("class", "tooltip")				
+  .style("opacity", 0);
+
+      //tooltip from gallery
+      var Tooltip = d3.select(visdivID)
+      .append("div")
+      .style("opacity", 0)
+      .attr("class", "tooltip")
+      .style("background-color", "white")
+      .style("border", "solid")
+      .style("border-width", "2px")
+      .style("border-radius", "5px")
+      .style("padding", "5px")
   
-  function tooltipAdjust(visdivID, w, h){
-    var divNumber = parseInt(visdivID[visdivID.length - 1]);
-    if(divNumber === 1){
-      return [0,Math.round(57.58) - 15];
+    // Three function that change the tooltip when user hover / move / leave a cell
+    var mouseover = function(d) {
+      Tooltip
+        .style("opacity", 1)
+      d3.select(this)
+        .style("stroke", "black")
+        .style("opacity", 1)
     }
-    if(divNumber === 2){
-      return [0,Math.round(.4*h + 1*57.58)];
+    var mousemove = function(d) {
+      var adjust = tooltipAdjust(visdivID, window.innerWidth, window.innerHeight);
+      //console.log(getMousepos());
+      Tooltip
+        .html("Total miles ran where<br>" + att + " is " + d.val + ": " + Math.round(d.count * 100) / 100)
+        .style("left", (d3.mouse(this)[0]+adjust[0]) + "px")
+        .style("top", (d3.mouse(this)[1] + adjust[1]) + "px")
     }
-    if(divNumber === 3){
-      return [Math.round(w/2),Math.round(57) - 20];
-    }
-    if(divNumber === 4){
-      return [Math.round(w/2),Math.round(.4*h + 1* 57.58)];
-    }
-  }
-  
-  //--------------------------------------------------------------------------------------------------------------
-  function BuildaBarChart (loc, data, attr, svg, visdivID){
-    //
-    //
-    var chart = svg.append('g')
-      .attr('class', 'chart')
-    /*const margin = { left: loc.w/10, right: loc.w/10, top: loc.h/10, bottom: loc.h/10 }; */
-    const margin = {left:0,right:0, top:0, bottom:0};
-
-    
-    
-    let att = attr.Xaxis;
-    let c = buildCount(data,att);
-    //console.log(c);
-    catSort(att,c);
-    //console.log(c);
-    let dom = [];
-    for(var i in c){
-      dom.push(c[i].val);
-    }
-    maxC = maxCount(c);
-    if(dom.length > 15){
-      margin.bottom = loc.h/8;
-    }
-
-    var w = loc.w - margin.left - margin.right;
-    var h = loc.h - margin.top - margin.bottom;
-    //scales
-    var bandScale = d3.scaleBand()
-      .domain(dom)
-      .range([margin.left + loc.x, w + + loc.x])
-      .paddingInner(0.05);
-  
-    var countScale = d3.scaleLinear()
-      .domain([0, Math.round(maxC*4/3)])
-      .range([0,h]);
-    var countScale2 = d3.scaleLinear()
-      .domain([0, Math.round(maxC*4/3)])
-      .range([h+margin.top,margin.top]);
-  
-    const g = chart.append('g');
-
-
-    var div = d3.select("svg").append("div")	
-    .attr("class", "tooltip")				
-    .style("opacity", 0);
-
-        //tooltip from gallery
-        var Tooltip = d3.select(visdivID)
-        .append("div")
+    var mouseleave = function(d) {
+      Tooltip
         .style("opacity", 0)
-        .attr("class", "tooltip")
-        .style("background-color", "white")
-        .style("border", "solid")
-        .style("border-width", "2px")
-        .style("border-radius", "5px")
-        .style("padding", "5px")
-    
-      // Three function that change the tooltip when user hover / move / leave a cell
-      var mouseover = function(d) {
-        Tooltip
-          .style("opacity", 1)
-        d3.select(this)
-          .style("stroke", "black")
-          .style("opacity", 1)
-      }
-      var mousemove = function(d) {
-        var adjust = tooltipAdjust(visdivID, window.innerWidth, window.innerHeight);
-        //console.log(getMousepos());
-        Tooltip
-          .html("Total miles ran where<br>" + att + " is " + d.val + ": " + Math.round(d.count * 100) / 100)
-          .style("left", (d3.mouse(this)[0]+adjust[0]) + "px")
-          .style("top", (d3.mouse(this)[1] + adjust[1]) + "px")
-      }
-      var mouseleave = function(d) {
-        Tooltip
-          .style("opacity", 0)
-        d3.select(this)
-          .style("stroke", "none")
-          .style("opacity", 1)
-      }
-
-
-    //rectangles
-    g.selectAll('rect')
-      .data(c)
-      .enter()
-      .append('rect')
-    .attr("fill", "#69b3a2")
-      .attr('x', function(d) {
-          return bandScale(d.val);
-      })
-    .attr('y', function(d){return h - countScale(d.count) - 0*margin.bottom + loc.y;
-    })
-      .attr('width', bandScale.bandwidth())
-      .attr('height', function(d) {
-          return countScale(d.count);
-      })
-        .on("mouseover", mouseover)
-        .on("mousemove", mousemove)
-        .on("mouseleave", mouseleave)
-      ;
-
-
-    
-  
-    //axis
-    var xAxis = d3.axisBottom()
-    .scale(bandScale);
-    var xAxisEl = chart.append('g')
-      .attr('transform', `translate(0, ${loc.h + loc.y - margin.bottom})`)
-      .call(xAxis)
-      ;
-     if(dom.length > 11 && att != 'month'){
-      xAxisEl.selectAll('text')
-      .attr("y", 0)
-      .attr("x", 9)
-      .attr("dy", ".35em")
-      .attr("transform", "rotate(90)")
-      .style("text-anchor", "start")
-      .style('font-size', 5);
-     } 
-  
-    var yAxis = d3.axisLeft().scale(countScale2)
-      .ticks(4);
-    var yAxisEl = chart.append('g')
-    .attr('transform', 'translate(' + (margin.left + loc.x) + ',' + loc.y+ ')' )
-    .call(yAxis);
-
-    svg.append("text")
-    .attr("class", "y label")
-    .attr("text-anchor", "end")
-    .attr("y", -10)
-    .attr('x', 0)
-    .text("Miles");
-    var labeloffset = 35;
-    if(dom.length > 11 && att != 'month'){
-      labeloffset = 50;
+      d3.select(this)
+        .style("stroke", "none")
+        .style("opacity", 1)
     }
-    svg.append("text")
-    .attr("class", "x label")
-    .attr("text-anchor", "middle")
-    .attr("y", h+labeloffset)
-    .attr('x', w/2)
-    .text(att);
+
+
+  //rectangles
+  g.selectAll('rect')
+    .data(c)
+    .enter()
+    .append('rect')
+  .attr("fill", "#69b3a2")
+    .attr('x', function(d) {
+        return bandScale(d.val);
+    })
+  .attr('y', function(d){ return h - countScale(d.count) - 0*margin.bottom + loc.y;
+  })
+    .attr('width', bandScale.bandwidth())
+    .attr('height', function(d) {
+        return countScale(d.count);
+    })
+      .on("mouseover", mouseover)
+      .on("mousemove", mousemove)
+      .on("mouseleave", mouseleave)
+    ;
+
+
+  
+
+  //axis
+  var xAxis = d3.axisBottom()
+  .scale(bandScale);
+  var xAxisEl = chart.append('g')
+    .attr('transform', `translate(0, ${loc.h + loc.y - margin.bottom})`)
+    .call(xAxis)
+    ;
+    if(dom.length > 11 && att != 'month'){
+    xAxisEl.selectAll('text')
+    .attr("y", 0)
+    .attr("x", 9)
+    .attr("dy", ".35em")
+    .attr("transform", "rotate(90)")
+    .style("text-anchor", "start")
+    .style('font-size', 5);
+    } 
+
+  var yAxis = d3.axisLeft().scale(countScale2)
+    .ticks(4);
+  var yAxisEl = chart.append('g')
+  .attr('transform', 'translate(' + (margin.left + loc.x) + ',' + loc.y+ ')' )
+  .call(yAxis);
+
+  svg.append("text")
+  .attr("class", "y label")
+  .attr("text-anchor", "end")
+  .attr("y", -10)
+  .attr('x', 0)
+  .text("Miles");
+  var labeloffset = 35;
+  if(dom.length > 11 && att != 'month'){
+    labeloffset = 50;
   }
+  svg.append("text")
+  .attr("class", "x label")
+  .attr("text-anchor", "middle")
+  .attr("y", h+labeloffset)
+  .attr('x', w/2)
+  .text(att);
+}
   
   //Clusterrrrr---------------------------------------------
-  function BuildaClusterBarChart(loc, data, attr,svg, visdivID){
-    //console.log(loc.y);
+  function BuildaClusterBarChart(loc, data, attr,svg){
     let att1 = attr.Xaxis;
     let att2 = attr.Yaxis;
     var c = buildClusterCount(data,att1,att2);
@@ -387,7 +376,6 @@ function buildCount (data, attr){
     let domt = {};
     for(var i in c){
       for(var j in c[i].att){
-        //console.log(c[i].att[j]);
         domt[c[i].att[j].val] = 0;
       }
     }

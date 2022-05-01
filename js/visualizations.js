@@ -1,6 +1,5 @@
 //makeVisualization(attributes: {}, vis_div: str) => None
 function MakeVisualization(attributes, vis_div) {
-
     removeOldVisualization(vis_div);
 
     //const data_url = 'C:/Users/dayle/OneDrive/Desktop/cs571/Runners-Data-Visualization';
@@ -16,10 +15,17 @@ function MakeVisualization(attributes, vis_div) {
         if (AttributeType[a1] === "categorical" && AttributeType[a2] === "categorical") return buildClusterBarChart(a1, a2, vis_div, data_url);
         if (AttributeType[a1] === "quantitative" && AttributeType[a2] === "quantitative") return buildScatterPlot(a1, a2, vis_div, data_url);
         //Note: when making a whisker plot, make sure that a1, the first attribute passed, is categorical
-        if (AttributeType[a1] === "categorical" && AttributeType[a2] ==="quantitative") return buildWhiskerPlot(a1, a2, vis_div, data_url);
+        if (categoricalAndQuantitative(a1, a2)) return buildWhiskerPlot(a1, a2, vis_div, data_url);
+        console.log(attributes.size, attributes)
         console.log("ERROR: invalid attributes selected or no type found");
     } else {
-        console.log("ERROR: too many attributes selected");
+        console.log("ERROR: Well, something broke with attribute size");
+    }
+}
+
+function categoricalAndQuantitative(a1, a2) {
+    if ((AttributeType[a1] === "categorical" && AttributeType[a2] ==="quantitative") || (AttributeType[a1] === "quantitative" && AttributeType[a2] ==="categorical")) {
+        return true
     }
 }
 
@@ -254,6 +260,8 @@ function buildScatterPlot(a1, a2, vis_div, data_url) {
 
 //buildWhiskerPlot(a1: categorical string, a2: quantitative string) => None
 function buildWhiskerPlot(a1, a2, vis_div, data_url) {
+    const categorical = (AttributeType[a1] === "categorical"? a1:a2);
+    const quantitative = (AttributeType[a1] === "quantitative"? a1:a2);
     // set the dimensions and margins of the graph
     const [margin, width, height] = getDimensions(vis_div);
 
@@ -281,11 +289,11 @@ function buildWhiskerPlot(a1, a2, vis_div, data_url) {
         }
         // Compute quartiles, median, inter quantile range min and max --> these info are then used to draw the box.
         var sumstat = d3.nest() // nest function allows to group the calculation per level of a factor
-        .key(function(d) { return d[a1];})
+        .key(function(d) { return d[categorical];})
         .rollup(function(d) {
-            q1 = d3.quantile(d.map(function(g) { return g[a2];}).sort(d3.ascending),.25)
-            median = d3.quantile(d.map(function(g) { return g[a2];}).sort(d3.ascending),.5)
-            q3 = d3.quantile(d.map(function(g) { return g[a2];}).sort(d3.ascending),.75)
+            q1 = d3.quantile(d.map(function(g) { return g[quantitative];}).sort(d3.ascending),.25)
+            median = d3.quantile(d.map(function(g) { return g[quantitative];}).sort(d3.ascending),.5)
+            q3 = d3.quantile(d.map(function(g) { return g[quantitative];}).sort(d3.ascending),.75)
             interQuantileRange = q3 - q1
             min = q1 - 1.5 * interQuantileRange
             max = q3 + 1.5 * interQuantileRange

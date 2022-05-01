@@ -4,6 +4,8 @@ html, body {
 #primary-var-wrapper {
     width: 100%;
     height: 5%;
+    display: flex;
+    justify-content: center;
     text-align: center;
 }
 #all-vis-wrapper {
@@ -26,11 +28,12 @@ html, body {
     width: 100%;
     height: 100%;
 }
-.dropdown {
-    margin: 10px;
-}
 .form-select {
-    background-color: darkslategrey;
+    height: fit-content;
+    margin: 10px;
+    width: 45%;
+    /* darkslategrey */
+    background-color: darkseagreen;
     color: white;
     text-align: center;
 }

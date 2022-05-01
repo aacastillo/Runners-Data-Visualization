@@ -1,26 +1,28 @@
 window.addEventListener('load', async () => {
-    //whiskerplot - const attributes = new Set(["conditions", "pace"]);
-    //const attributes = new Set(["conditions"]);
-    //const attributes = new Set(["mental","terrain"]);
-    //categoricalAttributes quantitativeAttributes
-
-    RenderDropdown("primary-var-dropdown");
-    
-
-    const attributes1 = new Set(["towns", "calories"]);
-    RenderDropdown("single-vis-1-dropdown");
-    MakeVisualization(attributes1, "single-vis-1");
-
-    const attributes2 = new Set(["terrain", "physical"]);
-    RenderDropdown("single-vis-2-dropdown");
-    MakeVisualization(attributes2, "single-vis-2");
-
-    const attributes3 = new Set(["steps", "steps"]);
-    RenderDropdown("single-vis-3-dropdown");
-    MakeVisualization(attributes3, "single-vis-3");
-
-    const attributes4 = new Set(["towns", "towns"]);
-    RenderDropdown("single-vis-4-dropdown");
-    MakeVisualization(attributes4, "single-vis-4");
-
+    RenderDropdowns();
+    DefaultVisualizations()
 });
+
+/*
+    Default primary variable and secondary variable selections - on page load
+        Primary variable: miles
+        Vis 1: Variable: date - Trend Graph
+        Vis 2: Var: Pace - Scatterplot
+        Vis 3: Var: Terrain - whiskerplot
+        Vis 4: Var: Mental - whiskerplot
+
+    If primary variable selected, rerender all visualization - when primary dropdown selected
+        MakeAllVisualization(primary)
+            for each dropdown element //4
+                MakeVisualization (div_id, [primary, secondary])
+
+        
+    If secondary variable selected, render that visualization only - when elemenet of dropdown class selected
+        Make Visualization for that 
+
+    MakeVisualization(ID, [primary, secondary])
+        remove old warning
+        if secondary and primary are the same, then throw warning
+        else make super the visualization
+
+*/
