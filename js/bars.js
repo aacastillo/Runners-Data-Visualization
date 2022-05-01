@@ -172,16 +172,16 @@ function buildCount (data, attr){
   function tooltipAdjust(visdivID, w, h){
     var divNumber = parseInt(visdivID[visdivID.length - 1]);
     if(divNumber === 1){
-      return [0,h];
+      return [0,.25*h];
     }
     if(divNumber === 2){
-      return [0,2*h + h/3];
+      return [0,.7*h];
     }
     if(divNumber === 3){
-      return [w,h];
+      return [w/2,.25*h];
     }
     if(divNumber === 4){
-      return [w,2*h + h/3];
+      return [w/2,.7*h];
     }
   }
 
@@ -244,6 +244,7 @@ function buildCount (data, attr){
         .style("padding", "5px")
     
       // Three function that change the tooltip when user hover / move / leave a cell
+      //console.log(window.innerWidth);
       var mouseover = function(d) {
         Tooltip
           .style("opacity", 1)
@@ -252,7 +253,7 @@ function buildCount (data, attr){
           .style("opacity", 1)
       }
       var mousemove = function(d) {
-        var adjust = tooltipAdjust(visdivID, w, h);
+        var adjust = tooltipAdjust(visdivID, window.innerWidth, window.innerHeight);
         Tooltip
           .html("Total miles ran where<br>" + att + " is " + d.val + ": " + Math.round(d.count * 100) / 100)
           .style("left", (d3.mouse(this)[0]+adjust[0]) + "px")
