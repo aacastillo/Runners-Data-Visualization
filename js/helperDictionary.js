@@ -68,6 +68,7 @@ const CatOrder = {
                  n:1, y:2
              }},
     "towns": {"ordered": false},
+    "town": {"ordered": false},
     "state": {"ordered": false},
     "terrain": {"ordered": false},
     "conditions": {"ordered": false},

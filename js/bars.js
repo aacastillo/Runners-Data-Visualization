@@ -128,6 +128,32 @@ function buildCount (data, attr){
     }
     return r;
   }
+
+  function townFix2(d, att2){
+    var r = [];
+    for(var i in d){
+      var twn = d[i].towns;
+      if(twn != '' ){
+        //console.log(i);
+        if(!hasChar(twn,',')){
+          r[r.push({'town': twn}) - 1][att2] = d[i][att2];
+        }else{
+
+          var cur = "";
+          for(var j in twn){
+            if(twn[j] === ','){
+              //console.log(i,cur);
+              r[r.push({'town': cur}) - 1][att2] = d[i][att2];
+              cur = '';
+            }else if(twn[j] != ' '){
+              cur += twn[j];
+            }
+          }
+        } 
+      }
+    }
+    return r;
+  }
   
   function maxCount(d){
     let max = 0;

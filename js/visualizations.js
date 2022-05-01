@@ -56,7 +56,7 @@ function buildBarChart(a1, vis_div, data_url) {
     
 
     d3.csv(data_url, function(data){
-        console.log(data);
+        //console.log(data);
         BuildaBarChart({x:0, y:0, w:width, h:height}, data, {Xaxis: a1, Yaxis:""}, svg, "#"+vis_div);
     })
 }
@@ -270,9 +270,15 @@ function buildWhiskerPlot(a1, a2, vis_div, data_url) {
     d3.csv(data_url, function(data) {
         
         data = data.filter(function(x){
-            return !(x[a1] === "" || x[a2] === '')
+            return !(x[a1] === "" || x[a2] === '' || x[a1] === undefined || x[a2] === undefined)
         })
-        
+        //townfix time
+        var f = (n) => n;
+        if(a1 === 'towns'){
+            data = townFix2(data, a2);
+            a1 = 'town';
+            f = n => 'town';
+        }
         // Compute quartiles, median, inter quantile range min and max --> these info are then used to draw the box.
         var sumstat = d3.nest() // nest function allows to group the calculation per level of a factor
         .key(function(d) { return d[a1];})
@@ -302,9 +308,10 @@ function buildWhiskerPlot(a1, a2, vis_div, data_url) {
                 .text(Units.apply(a2,a2));
         //end of labels
         // Show the X scale
+        console.log(getDomain(data,'town'));
         var x = d3.scaleBand()
             .range([ 0, width ])
-            .domain(getDomain(data,a1))
+            .domain(getDomain(data,f(a1)))
             .paddingInner(1)
             .paddingOuter(.5)
         svg.append("g")
