@@ -210,10 +210,9 @@ function buildScatterPlot(a1, a2, vis_div, data_url) {
       var mousemove = function(d) {
         //console.log('hello?')
         var adjust = tooltipAdjust(vis_div, window.innerWidth, window.innerHeight);
-        
         Tooltip
           .html(a1+': ' + Units.apply(a1,Math.round(d[a1] * 100) / 100) + " <br>" + a2 +': ' + Units.apply(a2,Math.round(d[a2] * 100) / 100))
-          .style("left", (d3.mouse(this)[0]+adjust[0]) + "px")
+          .style("left", (d3.mouse(this)[0] + adjust[0]) + "px")
           .style("top", (d3.mouse(this)[1] + adjust[1]) + "px")
           .style("opacity", 1)
       }

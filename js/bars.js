@@ -174,16 +174,16 @@ function buildCount (data, attr){
   function tooltipAdjust(visdivID, w, h){
     var divNumber = parseInt(visdivID[visdivID.length - 1]);
     if(divNumber === 1){
-      return [0,Math.round(.25*h) + 10];
+      return [0,Math.round(57.58) - 15];
     }
     if(divNumber === 2){
-      return [0,Math.round(.7*h)+ 10];
+      return [0,Math.round(.4*h + 1*57.58)];
     }
     if(divNumber === 3){
-      return [Math.round(w/2),Math.round(.25*h)+ 10];
+      return [Math.round(w/2),Math.round(57) - 20];
     }
     if(divNumber === 4){
-      return [Math.round(w/2),Math.round(.7*h)+ 10];
+      return [Math.round(w/2),Math.round(.4*h + 1* 57.58)];
     }
   }
   
@@ -255,8 +255,7 @@ function buildCount (data, attr){
       }
       var mousemove = function(d) {
         var adjust = tooltipAdjust(visdivID, window.innerWidth, window.innerHeight);
-        console.log(adjust);
-        console.log(window.innerWidth, window.innerHeight)
+        //console.log(getMousepos());
         Tooltip
           .html("Total miles ran where<br>" + att + " is " + d.val + ": " + Math.round(d.count * 100) / 100)
           .style("left", (d3.mouse(this)[0]+adjust[0]) + "px")
