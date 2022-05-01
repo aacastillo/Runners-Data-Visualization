@@ -407,9 +407,9 @@ function buildCount (data, attr){
 
     var colorScaleMax = 1;
     if(att2 != 'town'){
-    if(CatOrder[att2].ordered){
-        colorScaleMax = .5 + (1/dom2.length);
-    }
+    // if(CatOrder[att2].ordered){
+    //     colorScaleMax = .5 + (1/dom2.length);
+    // }
     }
     var colorScale = d3.scaleBand()
       .domain(dom2)
@@ -535,7 +535,7 @@ function buildCount (data, attr){
             return countScale(d.count);
         })
         .attr("fill", d => {
-          return d3.interpolateHslLong("#69b3a2", "blue")(colorScale2(dom2.indexOf(d.val)));
+          return d3.interpolateHslLong("#74FF41","#7A41FF")(colorScale2(dom2.indexOf(d.val)));
         })
         .on("mouseover", mouseover)
         .on("mousemove", mousemove)
@@ -591,7 +591,7 @@ function buildCount (data, attr){
         return legendScale.bandwidth();
       })
       .attr("fill", d => {
-          return d3.interpolateHslLong("#69b3a2", "blue")(colorScale2(dom2.indexOf(d)));
+          return d3.interpolateHslLong("#74FF41","#7A41FF")(colorScale2(dom2.indexOf(d)));
         });
       var font = 7;
     if(dom2.length > 25){
