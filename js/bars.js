@@ -351,7 +351,7 @@ function BuildaBarChart (loc, data, attr, svg, visdivID){
 }
   
   //Clusterrrrr---------------------------------------------
-  function BuildaClusterBarChart(loc, data, attr,svg){
+  function BuildaClusterBarChart(loc, data, attr,svg,visdivID){
     let att1 = attr.Xaxis;
     let att2 = attr.Yaxis;
     var c = buildClusterCount(data,att1,att2);
