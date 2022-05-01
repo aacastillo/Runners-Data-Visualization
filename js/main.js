@@ -5,8 +5,9 @@ window.addEventListener('load', async () => {
     //categoricalAttributes quantitativeAttributes
 
     RenderDropdown("primary-var-dropdown");
+    
 
-    const attributes1 = new Set(["miles", "V02 Max"]);
+    const attributes1 = new Set(["steps", "calories"]);
     RenderDropdown("single-vis-1-dropdown");
     MakeVisualization(attributes1, "single-vis-1");
 
@@ -14,11 +15,11 @@ window.addEventListener('load', async () => {
     RenderDropdown("single-vis-2-dropdown");
     MakeVisualization(attributes2, "single-vis-2");
 
-    const attributes3 = new Set(["V02 Max", "V02 Max"]);
+    const attributes3 = new Set(["steps", "steps"]);
     RenderDropdown("single-vis-3-dropdown");
     MakeVisualization(attributes3, "single-vis-3");
 
-    const attributes4 = new Set(["month", "month"]);
+    const attributes4 = new Set(["day", "day"]);
     RenderDropdown("single-vis-4-dropdown");
     MakeVisualization(attributes4, "single-vis-4");
 

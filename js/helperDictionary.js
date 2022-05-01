@@ -9,10 +9,10 @@ const AttributeType = {
     "elevation": "quantitative",
     "EPM": "quantitative",
     "time of day": "quantitative",
-    "hour": "quantitative",
     "people": "quantitative",
     "temp": "quantitative",
-
+    
+    "hour": "categorical",
     "year": "categorical",
     "month": "categorical",
     "season": "categorical",
@@ -31,14 +31,20 @@ const AttributeType = {
 };
 
 const QuantitativeAttributes = [
-    "miles","time","pace","calories","steps","heart rate","VO2","elevation","EPM","time of day","hour","people","temp"
+    "miles","time","pace","calories","steps","heart rate","VO2","elevation","EPM","time of day","people","temp"
 ];
 
 const CategoricalAttributes = [
-    "year","month","season","date","day","shoes","race","towns","state","terrain","conditions","podcast","physical","mental","abs"
+    "year","month","season","date","day","shoes","race","towns","state","hour","terrain","conditions","podcast","physical","mental","abs"
 ];
 
 const CatOrder = {
+    "hour": {"ordered": true,
+              "order" : {
+                  '12 AM': 1, '1 AM': 2,'2 AM': 3,'3 AM': 4,'4 AM': 5,'5 AM': 6,'6 AM': 7,'7 AM': 8,'8 AM': 9,
+                  '9 AM': 10,'10 AM': 11,'11 AM': 12,'12 PM': 13,'1 PM': 14,'2 PM': 15,'3 PM': 16, '4 PM': 17,
+                  '5 PM': 18,'6 PM': 19,'7 PM': 20,'8 PM': 21,'9 PM': 22,'10 PM': 23, '11 PM': 24 
+              }},
     "year": {"ordered": true,
               "order" : {
                   '2019': 1, '2020': 2, '2021': 3, '2022' : 4
@@ -54,7 +60,7 @@ const CatOrder = {
                 }},
     "day": {"ordered": true,
             "order": {
-                sun:1, mon:2, tue:3, wen:4, thu:5, fri:6, sat:7
+                sun:1, mon:2, tue:3, wed:4, thu:5, fri:6, sat:7
             }},
     "shoes": {"ordered": false},
     "race": {"ordered": true,
@@ -92,11 +98,11 @@ const Units = {
     "miles": "",
     "time": "",
     "pace": "min/mile",
-    "cal": "",
+    "calories": "",
     "steps": "",
     "heart rate": "bpm",
     "V02 Max": "mL/kg/min",
-    "elev": "",
+    "elevation": "ft",
     "EPM": "elev/mile",
     "TOD": "",
     "hour": "",
