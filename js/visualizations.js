@@ -260,7 +260,7 @@ function buildScatterPlot(a1, a2, vis_div, data_url) {
 
 //buildWhiskerPlot(a1: categorical string, a2: quantitative string) => None
 function buildWhiskerPlot(a1, a2, vis_div, data_url) {
-    const categorical = (AttributeType[a1] === "categorical"? a1:a2);
+    var categorical = (AttributeType[a1] === "categorical"? a1:a2);
     const quantitative = (AttributeType[a1] === "quantitative"? a1:a2);
     // set the dimensions and margins of the graph
     const [margin, width, height] = getDimensions(vis_div);
@@ -282,7 +282,7 @@ function buildWhiskerPlot(a1, a2, vis_div, data_url) {
         })
         //townfix time
         var f = (n) => n;
-        if(a1 === 'towns'){
+        if(categorical === 'towns'){
             data = townFix2(data, quantitative);
             categorical = 'town';
             f = n => 'town';
@@ -302,10 +302,14 @@ function buildWhiskerPlot(a1, a2, vis_div, data_url) {
         })
         .entries(data);
         //labels
+        labeloffset = 0;
+        if(getDomain(data,f(categorical)).length > 11 && categorical != 'month'){
+            labeloffset = 15;
+          }
 
         svg.append("text")      // text label for the x axis
                 .attr("x",width/2)
-                .attr("y",  height + margin.bottom - 10)
+                .attr("y",  height + margin.bottom - 10 + labeloffset)
                 .style("text-anchor", "middle")
                 .text(categorical);
         svg.append("text")
@@ -324,9 +328,19 @@ function buildWhiskerPlot(a1, a2, vis_div, data_url) {
             .domain(getDomain(data,f(categorical)))
             .paddingInner(1)
             .paddingOuter(.5)
-        svg.append("g")
+        var xAxisEl = svg.append("g")
             .attr("transform", "translate(0," + height + ")")
             .call(d3.axisBottom(x))
+
+            if(getDomain(data,f(categorical)).length > 11 && categorical != 'month'){
+                xAxisEl.selectAll('text')
+                .attr("y", 0)
+                .attr("x", 9)
+                .attr("dy", ".35em")
+                .attr("transform", "rotate(90)")
+                .style("text-anchor", "start")
+                .style('font-size', 5);
+            } 
 
         // Show the Y scale
         var y = d3.scaleLinear()

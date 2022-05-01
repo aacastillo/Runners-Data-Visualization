@@ -2,7 +2,7 @@ const VIDS = ["single-vis-1", "single-vis-2", "single-vis-3", "single-vis-4"];
 
 const AttributeType = {
     "miles": "quantitative",
-    "time": "quantitative",
+    //"time": "quantitative",
     "pace": "quantitative",
     "calories": "quantitative",
     "steps": "quantitative",
@@ -33,7 +33,7 @@ const AttributeType = {
 };
 
 const QuantitativeAttributes = [
-    "miles","time","pace","calories","steps","heart rate","VO2","elevation","EPM","time of day","people","temp"
+    "miles","pace","calories","steps","heart rate","V02 Max","elevation","EPM","time of day","people","temp"
 ];
 
 const CategoricalAttributes = [
@@ -43,9 +43,9 @@ const CategoricalAttributes = [
 const CatOrder = {
     "hour": {"ordered": true,
               "order" : {
-                  '12 AM': 1, '1 AM': 2,'2 AM': 3,'3 AM': 4,'4 AM': 5,'5 AM': 6,'6 AM': 7,'7 AM': 8,'8 AM': 9,
-                  '9 AM': 10,'10 AM': 11,'11 AM': 12,'12 PM': 13,'1 PM': 14,'2 PM': 15,'3 PM': 16, '4 PM': 17,
-                  '5 PM': 18,'6 PM': 19,'7 PM': 20,'8 PM': 21,'9 PM': 22,'10 PM': 23, '11 PM': 24 
+                  '12:00AM': 1, '1:00AM': 2,'2:00AM': 3,'3:00AM': 4,'4:00AM': 5,'5:00AM': 6,'6:00AM': 7,'7:00AM': 8,'8:00AM': 9,
+                  '9:00AM': 10,'10:00AM': 11,'11:00AM': 12,'12:00PM': 13,'1:00PM': 14,'2:00PM': 15,'3:00PM': 16, '4:00PM': 17,
+                  '5:00PM': 18,'6:00PM': 19,'7:00PM': 20,'8:00PM': 21,'9:00PM': 22,'10:00PM': 23, '11:00PM': 24 
               }},
     "year": {"ordered": true,
               "order" : {
