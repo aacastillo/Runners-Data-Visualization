@@ -138,7 +138,7 @@ function buildClusterBarChart(a1, a2, vis_div, data_url) {
 
 
     d3.csv(data_url, function(data){
-        BuildaClusterBarChart({x:0, y:0, w:width, h:height}, data, {Xaxis: a1, Yaxis:a2}, svg);
+        BuildaClusterBarChart({x:0, y:0, w:width, h:height}, data, {Xaxis: a1, Yaxis:a2}, svg, "#"+vis_div);
     })
 }
 

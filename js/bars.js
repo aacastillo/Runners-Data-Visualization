@@ -61,7 +61,8 @@ function buildCount (data, attr){
             }
         }else{
             if(mil){
-                r[v][x] = parseFloat(data[i].miles);
+                r[v][x] = parseFloat(data[i].miles)
+                r[v]['outer'] = v;
           }else{
                 r[v][x] = 1;
           }
@@ -75,17 +76,18 @@ function buildCount (data, attr){
       }
       }
     }
-  
+    //console.log(r);
     var res = [];
     for(var j in r){
       var tempArr = [];
       for(var i in r[j]){
-        if(i != "total"){
-          tempArr.push({val: i, count: r[j][i]});
+        if(i != "total" && i != 'outer'){
+          tempArr.push({val: i, count: r[j][i], outer: r[j].outer});
         }
       }
       res.push({val: j, att: tempArr});
     }
+    //console.log(res);
     return res;
   }
 
@@ -184,7 +186,7 @@ function buildCount (data, attr){
       return [w/2,.7*h];
     }
   }
-
+  
   //--------------------------------------------------------------------------------------------------------------
   function BuildaBarChart (loc, data, attr, svg, visdivID){
     //
@@ -283,43 +285,6 @@ function buildCount (data, attr){
       .attr('height', function(d) {
           return countScale(d.count);
       })
-      // .on("mouseover", function(d) {		
-
-      //     d3.select(this).attr('fill', 'lightgray');
-
-      //   	g.append('g').attr('id', 'bar-tooltip').append('rect')
-      //     .attr("x", bandScale(c[0].val) + 2)
-      //     .attr('y', margin.top + loc.y)
-      //     .attr('width', 128)
-      //     .attr('height', h/5)
-      //     .attr('fill', 'lightgray');
-      //     d3.select('#bar-tooltip')
-      //     .append('text').text("Miles run where")
-      //     .attr('x', bandScale(c[0].val) + 10)
-      //     .attr('y', margin.top + loc.y + 10)
-      //     .attr('font-size', '8');
-      //     if(att === 'towns'){
-      //       att = 'town';
-      //     }
-      //     d3.select('#bar-tooltip')
-      //     .append('text').text(att + " is " + d.val + ": ")
-      //     .attr('x', bandScale(c[0].val) + 10)
-      //     .attr('y', margin.top + loc.y + 20)
-      //     .attr('font-size', '8');
-      //     d3.select('#bar-tooltip')
-      //     .append('text').text(Math.round(d.count * 100) / 100)
-      //     .attr('x', bandScale(c[0].val) + 10)
-      //     .attr('y', margin.top + loc.y + 30)
-      //     .attr('font-size', '8')
-          
-      //     //.attr('cols', '10');
-      //     //console.log(d);
-      //   })
-      //   .on('mouseout', function(d){
-      //     //console.log('out');
-      //     d3.select(this).attr('fill', '#69b3a2');
-      //     d3.select('#bar-tooltip').remove();
-      //   })
         .on("mouseover", mouseover)
         .on("mousemove", mousemove)
         .on("mouseleave", mouseleave)
@@ -370,7 +335,7 @@ function buildCount (data, attr){
   }
   
   //Clusterrrrr---------------------------------------------
-  function BuildaClusterBarChart(loc, data, attr,svg){
+  function BuildaClusterBarChart(loc, data, attr,svg, visdivID){
     //console.log(loc.y);
     let att1 = attr.Xaxis;
     let att2 = attr.Yaxis;
@@ -507,7 +472,42 @@ function buildCount (data, attr){
         //   }
         //   return colorScale(dom2[f(index)]);
         // }
+    
+    //tooltip from gallery
+    var Tooltip = d3.select(visdivID)
+    .append("div")
+    .style("opacity", 0)
+    .attr("class", "tooltip")
+    .style("background-color", "white")
+    .style("border", "solid")
+    .style("border-width", "2px")
+    .style("border-radius", "5px")
+    .style("padding", "5px")
 
+  // Three function that change the tooltip when user hover / move / leave a cell
+  //console.log(window.innerWidth);
+  var mouseover = function(d) {
+    Tooltip
+      .style("opacity", 1)
+    d3.select(this)
+      .style("stroke", "black")
+      .style("opacity", 1)
+  }
+  var mousemove = function(d) {
+    //console.log(d);
+    var adjust = tooltipAdjust(visdivID, window.innerWidth, window.innerHeight);
+    Tooltip
+      .html("Total miles ran where<br>" + att1 + " is " +d.outer + " and<br>"+ att2 + " is " + d.val + ": " + Math.round(d.count * 100) / 100)
+      .style("left", (d3.mouse(this)[0]+adjust[0]) + "px")
+      .style("top", (d3.mouse(this)[1] + adjust[1]) + "px")
+  }
+  var mouseleave = function(d) {
+    Tooltip
+      .style("opacity", 0)
+    d3.select(this)
+      .style("stroke", "none")
+      .style("opacity", 1)
+  }
   
     //bars
     const g = [];
@@ -537,56 +537,10 @@ function buildCount (data, attr){
         .attr("fill", d => {
           return d3.interpolateHslLong("#69b3a2", "blue")(colorScale2(dom2.indexOf(d.val)));
         })
-        .on("mouseover", function(d) {
-          //console.log("hoverrr");		
-
-          d3.select(this).attr('fill', 'lightgray');
-          //console.log(w/3+15);
-        	g[0].append('g').attr('id', 'bar-tooltip').append('rect')
-          .attr("x", bandScale(c[0].val) + 2)
-          .attr('y', margin.top + loc.y)
-          .attr('width', 128)
-          .attr('height', h/4)
-          .attr('fill', 'lightgray');
-          //text
-          d3.select('#bar-tooltip')
-          .append('text').text("Miles run where")
-          .attr('x', bandScale(c[0].val) + 10)
-          .attr('y', margin.top + loc.y + 10)
-          .attr('font-size', '8');
-          if(att1 === 'towns'){
-            att1 = 'town';
-          }
-          if(att2 === 'towns'){
-            att2 = 'town';
-          }
-
-          d3.select('#bar-tooltip')
-          .append('text').text(att1 + " is " + c[f].val)
-          .attr('x', bandScale(c[0].val) + 10)
-          .attr('y', margin.top + loc.y + 20)
-          .attr('font-size', '8');
-          d3.select('#bar-tooltip')
-          .append('text').text("and " + att2 + " is " + d.val + ": ")
-          .attr('x', bandScale(c[0].val) + 10)
-          .attr('y', margin.top + loc.y + 30)
-          .attr('font-size', '8');
-          d3.select('#bar-tooltip')
-          .append('text').text(Math.round(d.count * 100) / 100)
-          .attr('x', bandScale(c[0].val) + 10)
-          .attr('y', margin.top + loc.y + 40)
-          .attr('font-size', '8')
-          
-          //.attr('cols', '10');
-          //console.log(d);
-        })
-        .on('mouseout', function(d){
-          //console.log('out');
-          d3.select(this).attr('fill', d => {
-            return d3.interpolateHslLong("#69b3a2", "blue")(colorScale2(dom2.indexOf(d.val)));
-          });
-          d3.select('#bar-tooltip').remove();
-        });
+        .on("mouseover", mouseover)
+        .on("mousemove", mousemove)
+        .on("mouseleave", mouseleave)
+      ;;
     }
   
     //axis stuff
