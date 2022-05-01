@@ -278,15 +278,16 @@ function buildWhiskerPlot(a1, a2, vis_div, data_url) {
     d3.csv(data_url, function(data) {
         
         data = data.filter(function(x){
-            return !(x[a1] === "" || x[a2] === '' || x[a1] === undefined || x[a2] === undefined)
+            return !(x[categorical] === "" || x[quantitative] === '' || x[categorical] === undefined || x[quantitative] === undefined)
         })
         //townfix time
         var f = (n) => n;
         if(a1 === 'towns'){
-            data = townFix2(data, a2);
-            a1 = 'town';
+            data = townFix2(data, quantitative);
+            categorical = 'town';
             f = n => 'town';
         }
+        //console.log(data);
         // Compute quartiles, median, inter quantile range min and max --> these info are then used to draw the box.
         var sumstat = d3.nest() // nest function allows to group the calculation per level of a factor
         .key(function(d) { return d[categorical];})
@@ -306,20 +307,21 @@ function buildWhiskerPlot(a1, a2, vis_div, data_url) {
                 .attr("x",width/2)
                 .attr("y",  height + margin.bottom - 10)
                 .style("text-anchor", "middle")
-                .text(a1);
+                .text(categorical);
         svg.append("text")
                 .attr("transform", "rotate(-90)")
                 .attr("y", 0 - margin.left)
                 .attr("x",0 - (height / 2))
                 .attr("dy", "1em")
                 .style("text-anchor", "middle")
-                .text(Units.apply(a2,a2));
+                .text(Units.apply(quantitative,quantitative));
         //end of labels
         // Show the X scale
-        console.log(getDomain(data,'town'));
+        //console.log(getDomain(data,'town'));
+        //console.log(a1);
         var x = d3.scaleBand()
             .range([ 0, width ])
-            .domain(getDomain(data,f(a1)))
+            .domain(getDomain(data,f(categorical)))
             .paddingInner(1)
             .paddingOuter(.5)
         svg.append("g")
