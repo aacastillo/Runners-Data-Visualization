@@ -134,14 +134,15 @@ function getDomain(data, att){
             r.push(data[i][att])
         }
     }
+    console.log(att)
     if(CatOrder[att].ordered === true){
-            for(var i = 0; i < r.length; i++){ 
-              for(var j = 0; j < ( r.length - i -1 ); j++){
-                if(CatOrder.compare(att,r[j],r[j+1]) > 0){
-                  swap(r,j+1,j);
-                }
-              }
+        for(var i = 0; i < r.length; i++){ 
+            for(var j = 0; j < ( r.length - i -1 ); j++){
+            if(CatOrder.compare(att,r[j],r[j+1]) > 0){
+                swap(r,j+1,j);
             }
+            }
+        }
     }
     return r;
 }

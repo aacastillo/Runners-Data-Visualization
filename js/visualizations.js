@@ -12,6 +12,7 @@ function MakeVisualization(attributes, vis_div) {
         console.log("ERROR: invalid attribute selected or no type found");
     } else if (attributes.size === 2) {
         const [a1, a2] = attributes;
+        if (a1 === "trend/bar" || a2 === "trend/bar") return buildTrendBarGraph(a1, a2, vis_div, data_url);
         if (AttributeType[a1] === "categorical" && AttributeType[a2] === "categorical") return buildClusterBarChart(a1, a2, vis_div, data_url);
         if (AttributeType[a1] === "quantitative" && AttributeType[a2] === "quantitative") return buildScatterPlot(a1, a2, vis_div, data_url);
         //Note: when making a whisker plot, make sure that a1, the first attribute passed, is categorical
@@ -20,12 +21,6 @@ function MakeVisualization(attributes, vis_div) {
         console.log("ERROR: invalid attributes selected or no type found");
     } else {
         console.log("ERROR: Well, something broke with attribute size");
-    }
-}
-
-function categoricalAndQuantitative(a1, a2) {
-    if ((AttributeType[a1] === "categorical" && AttributeType[a2] ==="quantitative") || (AttributeType[a1] === "quantitative" && AttributeType[a2] ==="categorical")) {
-        return true
     }
 }
 
@@ -135,6 +130,12 @@ function buildTrendGraph(a1, vis_div, data_url) {
                 )
         }
     )
+}
+
+function buildTrendBarGraph(a1, a2, vis_div, data_url) {
+    const attribute = (a1==="trend/bar"? a2 : a1);
+    if (AttributeType[attribute] === "categorical") return buildBarChart(attribute, vis_div, data_url);
+    if (AttributeType[attribute] === "quantitative") return buildTrendGraph(attribute, vis_div, data_url);
 }
 
 //buildClusterBarChart => None
@@ -258,6 +259,12 @@ function buildScatterPlot(a1, a2, vis_div, data_url) {
     })
 }
 
+function categoricalAndQuantitative(a1, a2) {
+    if ((AttributeType[a1] === "categorical" && AttributeType[a2] ==="quantitative") || (AttributeType[a1] === "quantitative" && AttributeType[a2] ==="categorical")) {
+        return true
+    }
+}
+
 //buildWhiskerPlot(a1: categorical string, a2: quantitative string) => None
 function buildWhiskerPlot(a1, a2, vis_div, data_url) {
     var categorical = (AttributeType[a1] === "categorical"? a1:a2);
@@ -280,6 +287,7 @@ function buildWhiskerPlot(a1, a2, vis_div, data_url) {
         data = data.filter(function(x){
             return !(x[categorical] === "" || x[quantitative] === '' || x[categorical] === undefined || x[quantitative] === undefined)
         })
+
         //townfix time
         var f = (n) => n;
         if(categorical === 'towns'){
@@ -287,7 +295,6 @@ function buildWhiskerPlot(a1, a2, vis_div, data_url) {
             categorical = 'town';
             f = n => 'town';
         }
-        //console.log(data);
         // Compute quartiles, median, inter quantile range min and max --> these info are then used to draw the box.
         var sumstat = d3.nest() // nest function allows to group the calculation per level of a factor
         .key(function(d) { return d[categorical];})
@@ -322,10 +329,9 @@ function buildWhiskerPlot(a1, a2, vis_div, data_url) {
         //end of labels
         // Show the X scale
         //console.log(getDomain(data,'town'));
-        //console.log(a1);
         var x = d3.scaleBand()
             .range([ 0, width ])
-            .domain(getDomain(data,f(categorical)))
+            .domain(getDomain(data, f(categorical)))
             .paddingInner(1)
             .paddingOuter(.5)
         var xAxisEl = svg.append("g")
