@@ -5,7 +5,7 @@ const AttributeType = {
     "calories": "quantitative",
     "steps": "quantitative",
     "heart rate": "quantitative",
-    "VO2": "quantitative",
+    "V02 Max": "quantitative",
     "elevation": "quantitative",
     "EPM": "quantitative",
     "time of day": "quantitative",
@@ -95,7 +95,7 @@ const Units = {
     "cal": "",
     "steps": "",
     "heart rate": "bpm",
-    "VO2": "mL/kg/min",
+    "V02 Max": "mL/kg/min",
     "elev": "",
     "EPM": "elev/mile",
     "TOD": "",
@@ -109,3 +109,30 @@ const Units = {
         return str + '(' + this[att] + ')';
     }
 };
+
+function strFix(n){
+    //console.log(typeof(n));
+    if(typeof(n) === 'string'){
+        return parseFloat(n);
+    }
+    else{ return n;}
+}
+
+function getDomain(data, att){
+    var r = []
+    for(var i in data){
+        if(!r.includes(data[i][att])){
+            r.push(data[i][att])
+        }
+    }
+    if(CatOrder[att].ordered === true){
+            for(var i = 0; i < r.length; i++){ 
+              for(var j = 0; j < ( r.length - i -1 ); j++){
+                if(CatOrder.compare(att,r[j],r[j+1]) > 0){
+                  swap(r,j+1,j);
+                }
+              }
+            }
+    }
+    return r;
+}

@@ -146,17 +146,17 @@ function buildCount (data, attr){
     return max;
   }
 
-  function swap(arr, i1, i2, idk){
+  function swap(arr, i1, i2){
       // console.log(arr);
       // console.log(arr[0]);
-      if(!idk){
+
       var t = arr[i1];
       arr[i1] = arr[i2];
       arr[i2] = t;
-      }
+      
   }
 
-  function catSort(att, dat, idk){
+  function catSort(att, dat){
     //console.log(dat);
       if(!CatOrder[att].ordered){
           return;
@@ -165,7 +165,7 @@ function buildCount (data, attr){
           for(var j = 0; j < dat.length - i - 1; j++){
               if(CatOrder.compare(att, dat[j].val, dat[j+1].val)>0){
                   //console.log("swap in progress");
-                  swap(dat, j, j+1, idk);
+                  swap(dat, j, j+1);
               }
           }
       }

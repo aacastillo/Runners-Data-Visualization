@@ -6,15 +6,15 @@ window.addEventListener('load', async () => {
 
     RenderDropdown("primary-var-dropdown");
 
-    const attributes1 = new Set(["miles", "VO2"]);
+    const attributes1 = new Set(["miles", "V02 Max"]);
     RenderDropdown("single-vis-1-dropdown");
     MakeVisualization(attributes1, "single-vis-1");
 
-    const attributes2 = new Set(["month", "VO2"]);
+    const attributes2 = new Set(["month", "V02 Max"]);
     RenderDropdown("single-vis-2-dropdown");
     MakeVisualization(attributes2, "single-vis-2");
 
-    const attributes3 = new Set(["VO2", "VO2"]);
+    const attributes3 = new Set(["V02 Max", "V02 Max"]);
     RenderDropdown("single-vis-3-dropdown");
     MakeVisualization(attributes3, "single-vis-3");
 

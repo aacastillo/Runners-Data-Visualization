@@ -80,6 +80,10 @@ function buildTrendGraph(a1, vis_div, data_url) {
             return { date : d3.timeParse("%Y/%m/%d")(d.year + "/" + d.date), value : d[a1] }
           },
         function(data) {
+            data = data.filter(function(x){
+                return !(x['value'] === "")
+            })
+
             // Add X axis --> it is a date format
             var x = d3.scaleTime()
                 .domain(d3.extent(data, function(d) {return d.date; }))
@@ -119,7 +123,7 @@ function buildTrendGraph(a1, vis_div, data_url) {
                 .attr("stroke-width", 1.5)
                 .attr("d", d3.line()
                 .x(function(d) { return x(d.date) })
-                .y(function(d) { return y(d.value) })
+                .y(function(d) {return y(d.value) })
                 )
         }
     )
@@ -157,6 +161,11 @@ function buildScatterPlot(a1, a2, vis_div, data_url) {
 
     //Read the data
     d3.csv(data_url, function(data) {
+        
+        data = data.filter(function(x){
+            return !(x[a1] === "" || x[a2] === '')
+        })
+
 
         // Add X axis
         var x = d3.scaleLinear()
@@ -257,6 +266,11 @@ function buildWhiskerPlot(a1, a2, vis_div, data_url) {
 
     // Read the data and compute summary statistics for each specie
     d3.csv(data_url, function(data) {
+        
+        data = data.filter(function(x){
+            return !(x[a1] === "" || x[a2] === '')
+        })
+        
         // Compute quartiles, median, inter quantile range min and max --> these info are then used to draw the box.
         var sumstat = d3.nest() // nest function allows to group the calculation per level of a factor
         .key(function(d) { return d[a1];})
@@ -271,35 +285,24 @@ function buildWhiskerPlot(a1, a2, vis_div, data_url) {
         })
         .entries(data);
         //labels
-        var idk = "qunatitative";
-        var quan, qual;
-        if(AttributeType[a1] === idk){
-            quan = a1;
-            qual = a2;
-        }else{
-            quan = a2;
-            qual = a1;
-        }
-        if(Units[quan] != ''){
-            quan += ('(' + Units[quan] + ')');
-        }
+
         svg.append("text")      // text label for the x axis
                 .attr("x",width/2)
                 .attr("y",  height + margin.bottom - 10)
                 .style("text-anchor", "middle")
-                .text(qual);
+                .text(a1);
         svg.append("text")
                 .attr("transform", "rotate(-90)")
                 .attr("y", 0 - margin.left)
                 .attr("x",0 - (height / 2))
                 .attr("dy", "1em")
                 .style("text-anchor", "middle")
-                .text(quan);
+                .text(Units.apply(a2,a2));
         //end of labels
         // Show the X scale
         var x = d3.scaleBand()
             .range([ 0, width ])
-            .domain(["rainy", "snowy", "windy", "clear", "cloudy", "foggy", "humid", "indoors", "partly cloudy", "sunny"])
+            .domain(getDomain(data,a1))
             .paddingInner(1)
             .paddingOuter(.5)
         svg.append("g")
