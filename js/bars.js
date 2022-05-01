@@ -246,7 +246,6 @@ function buildCount (data, attr){
         .style("padding", "5px")
     
       // Three function that change the tooltip when user hover / move / leave a cell
-      //console.log(window.innerWidth);
       var mouseover = function(d) {
         Tooltip
           .style("opacity", 1)

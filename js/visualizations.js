@@ -195,6 +195,43 @@ function buildScatterPlot(a1, a2, vis_div, data_url) {
         svg.append("g")
         .call(d3.axisLeft(y));
 
+        //tooltips
+        //tooltip from gallery
+        var Tooltip = d3.select('#'+vis_div)
+        .append("div")
+        .style("opacity", 0)
+        .attr("class", "tooltip")
+        .style("background-color", "white")
+        .style("border", "solid")
+        .style("border-width", "2px")
+        .style("border-radius", "5px")
+        .style("padding", "5px");
+    
+      // Three function that change the tooltip when user hover / move / leave a cell
+      var mouseover = function(d) {
+        Tooltip
+          .style("opacity", 1)
+        d3.select(this)
+          .style("stroke", "black")
+          .style("opacity", 1)
+      }
+      var mousemove = function(d) {
+        console.log('hello?')
+        var adjust = tooltipAdjust(vis_div, window.innerWidth, window.innerHeight);
+        Tooltip
+          .html(a1+': ' + Math.round(d[a1] * 100) / 100 + " <br>" + a2 +': ' + Math.round(d[a2] * 100) / 100)
+          .style("left", (d3.mouse(this)[0]+adjust[0]) + "px")
+          .style("top", (d3.mouse(this)[1] + adjust[1]) + "px")
+          .style("opacity", 1)
+      }
+      var mouseleave = function(d) {
+        Tooltip
+          .style("opacity", 0)
+        d3.select(this)
+          .style("stroke", "none")
+          .style("opacity", 1)
+      }
+
         // Add dots
         svg.append('g')
         .selectAll("dot")
@@ -205,6 +242,9 @@ function buildScatterPlot(a1, a2, vis_div, data_url) {
             .attr("cy", function (d) { return y(d[a2]); } )
             .attr("r", 1.5)
             .style("fill", "#69b3a2")
+            .on("mouseover", mouseover)
+            .on("mousemove", mousemove)
+            .on("mouseleave", mouseleave)
 
     })
 }
