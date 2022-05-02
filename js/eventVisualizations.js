@@ -4,22 +4,22 @@ function DefaultVisualizations() {
     //const attributes = new Set(["mental","terrain"]);
     //categoricalAttributes quantitativeAttributes
 
-    setDropdownValue("primary-var-dropdown", "pace")
+    setDropdownValue("primary-var-dropdown", "miles")
 
-    const attributes1 = new Set(["pace"]);
-    setDropdownValue("single-vis-1-dropdown", "pace")
+    const attributes1 = new Set(["miles"]);
+    setDropdownValue("single-vis-1-dropdown", "trend/bar")
     MakeVisualization(attributes1, "single-vis-1");
 
-    const attributes2 = new Set(["pace", "miles"]);
-    setDropdownValue("single-vis-2-dropdown", "miles")
+    const attributes2 = new Set(["miles", "temp"]);
+    setDropdownValue("single-vis-2-dropdown", "temp")
     MakeVisualization(attributes2, "single-vis-2");
 
-    const attributes3 = new Set(["pace", "terrain"]);
-    setDropdownValue("single-vis-3-dropdown", "terrain")
+    const attributes3 = new Set(["miles", "year"]);
+    setDropdownValue("single-vis-3-dropdown", "year")
     MakeVisualization(attributes3, "single-vis-3");
 
-    const attributes4 = new Set(["pace","conditions"]);
-    setDropdownValue("single-vis-4-dropdown", "conditions")
+    const attributes4 = new Set(["miles","steps"]);
+    setDropdownValue("single-vis-4-dropdown", "steps")
     MakeVisualization(attributes4, "single-vis-4");
 }
 
