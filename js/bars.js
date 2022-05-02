@@ -224,7 +224,7 @@ function BuildaBarChart (loc, data, attr, svg, visdivID){
     dom.push(c[i].val);
   }
   maxC = maxCount(c);
-  if(dom.length > 15){
+  if(dom.length > 12){
     margin.bottom = loc.h/8;
   }
 
@@ -340,7 +340,10 @@ function BuildaBarChart (loc, data, attr, svg, visdivID){
   .text("Miles");
   var labeloffset = 35;
   if(dom.length > 11 && att != 'month'){
-    labeloffset = 50;
+    labeloffset = 55;
+  }
+  if(att === 'towns'){
+    att = 'town';
   }
   svg.append("text")
   .attr("class", "x label")
@@ -395,7 +398,7 @@ function BuildaBarChart (loc, data, attr, svg, visdivID){
         }
       }
     }
-    if(dom1.length > 15){
+    if(dom1.length > 12){
       margin.bottom = loc.h/8;
     }
     
@@ -620,7 +623,7 @@ function BuildaBarChart (loc, data, attr, svg, visdivID){
     }
     var labeloffset = 35;
     if(dom1.length > 11 && att1 != 'month'){
-      labeloffset = 48;
+      labeloffset = 55;
     }
 
     svg.append("text")
@@ -629,6 +632,9 @@ function BuildaBarChart (loc, data, attr, svg, visdivID){
     .attr("y", -10)
     .attr('x', 0)
     .text("Miles");
+    if(att1 === 'towns'){
+      att1 = 'town';
+    }
     svg.append("text")
     .attr("class", "x label")
     .attr("text-anchor", "middle")

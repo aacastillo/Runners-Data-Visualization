@@ -82,7 +82,14 @@ const CatOrder = {
                 terrible:1, bad:2, ok:3, good:4, amazing:5
             }},
     "abs": {"ordered": false},
-    "podcast": {"ordered": false},
+    "podcast": {"ordered": true,
+            "order": {
+                'Crime Junkie':0, 'Convos Over Cold Brew':1, 'Ali on the Run':9, 'Run Your Mouth':3, 
+                "I'll Have Another":4, 
+                'Queertalk':6, 'Queer Christian':7, 'Voice in Sport':8, 'Obsessed with Disappeared':17,
+                'Running Things Considered':16, 'Trials Talk':12, 'Torch Talk':13, 
+                'Citius Mag':14, 'Running for Real':15, 'More Than Running':2
+            }},
 
     //function for easy comparing
     //all inputs are strings
@@ -142,4 +149,21 @@ function getDomain(data, att){
         }
     }
     return r;
+}
+
+function CoCBFix(data){
+    for(var i in data){
+        if(data[i].podcast === "Convos over Cold Brew"){
+            data[i].podcast = "Convos Over Cold Brew";
+        }
+        if(data[i].podcast === "Ali on the Run "){
+            data[i].podcast = "Ali on the Run";
+        }
+        if(data[i].podcast === "More than Running"){
+            data[i].podcast = "More Than Running";
+        }
+        if(data[i].podcast === "Run Your Mouth:"){
+            data[i].podcast = "Run Your Mouth";
+        }
+    }
 }

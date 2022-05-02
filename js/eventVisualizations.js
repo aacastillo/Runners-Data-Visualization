@@ -10,7 +10,7 @@ function DefaultVisualizations() {
     setDropdownValue("single-vis-1-dropdown", "pace")
     MakeVisualization(attributes1, "single-vis-1");
 
-    const attributes2 = new Set(["miles", "pace"]);
+    const attributes2 = new Set(["pace", "miles"]);
     setDropdownValue("single-vis-2-dropdown", "miles")
     MakeVisualization(attributes2, "single-vis-2");
 

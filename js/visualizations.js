@@ -38,7 +38,7 @@ function removeOldVisualization(vis_div) {
 
 function getDimensions(vis_div) {
     const main_vis = document.getElementById(vis_div);
-    var margin = {top: 50, right: 50, bottom: 50, left: 50},
+    var margin = {top: 50, right: 50, bottom: 50, left: 60},
     width = main_vis.offsetWidth - margin.left - margin.right,
     height = main_vis.offsetHeight - margin.top - margin.bottom;
     return [margin, width, height];
@@ -58,6 +58,7 @@ function buildBarChart(a1, vis_div, data_url) {
 
     d3.csv(data_url, function(data){
         //console.log(data);
+        CoCBFix(data);
         BuildaBarChart({x:0, y:0, w:width, h:height}, data, {Xaxis: a1, Yaxis:""}, svg, "#"+vis_div);
     })
 }
@@ -104,14 +105,13 @@ function buildTrendGraph(a1, vis_div, data_url) {
             var y = d3.scaleLinear()
                 .domain([0, d3.max(data, function(d) { return +d.value; })])
                 .range([ height, 0 ]);
-
             svg.append("text")
                 .attr("transform", "rotate(-90)")
-                .attr("y", 0 - margin.left)
+                .attr("y", 5 - margin.left)
                 .attr("x",0 - (height / 2))
                 .attr("dy", "1em")
                 .style("text-anchor", "middle")
-                .text(Units.apply[a1,a1]);
+                .text(Units.apply(a1,a1));
             svg.append("g")
                 .call(d3.axisLeft(y));
 
@@ -186,6 +186,7 @@ function buildClusterBarChart(a1, a2, vis_div, data_url) {
 
 
     d3.csv(data_url, function(data){
+        CoCBFix(data);
         BuildaClusterBarChart({x:0, y:0, w:width, h:height}, data, {Xaxis: a1, Yaxis:a2}, svg, "#"+vis_div);
     })
 }
@@ -194,6 +195,9 @@ function buildClusterBarChart(a1, a2, vis_div, data_url) {
 function buildScatterPlot(a1, a2, vis_div, data_url) {
     // set the dimensions and margins of the graph
     const [margin, width, height] = getDimensions(vis_div);
+    // var t = a1;
+    // a1 = a2;
+    // a2 = t;
 
     // append the svg object to the body of the page
     var svg = d3.select("#" + vis_div)
@@ -223,7 +227,7 @@ function buildScatterPlot(a1, a2, vis_div, data_url) {
                 .text(Units.apply(a1,a1));
         svg.append("text")
                 .attr("transform", "rotate(-90)")
-                .attr("y", 0 - margin.left)
+                .attr("y", 5 - margin.left)
                 .attr("x",0 - (height / 2))
                 .attr("dy", "1em")
                 .style("text-anchor", "middle")
@@ -306,6 +310,7 @@ function buildWhiskerPlot(a1, a2, vis_div, data_url) {
     const quantitative = (AttributeType[a1] === "quantitative"? a1:a2);
     // set the dimensions and margins of the graph
     const [margin, width, height] = getDimensions(vis_div);
+    margin.bottom += 15;
 
     // append the svg object to the body of the page
     var svg = d3.select("#"+vis_div)
@@ -322,7 +327,7 @@ function buildWhiskerPlot(a1, a2, vis_div, data_url) {
         data = data.filter(function(x){
             return !(x[categorical] === "" || x[quantitative] === '' || x[categorical] === undefined || x[quantitative] === undefined)
         })
-
+        CoCBFix(data);
         //townfix time
         var f = (n) => n;
         if(categorical === 'towns'){
@@ -353,18 +358,19 @@ function buildWhiskerPlot(a1, a2, vis_div, data_url) {
 
         //labels
         const dom = getDomain(data, f(categorical));
-        labeloffset = 0;
-        if(dom.length > 11 && categorical != 'month'){
-            labeloffset = 15;
-        }
+        console.log(dom);
+        // labeloffset = 0;
+        // if(dom.length > 11 && categorical != 'month'){
+        //     labeloffset = 15;
+        // }
         svg.append("text")      // text label for the x axis
                 .attr("x",width/2)
-                .attr("y",  height + margin.bottom - 10 + labeloffset)
+                .attr("y",  height + margin.bottom - 10)
                 .style("text-anchor", "middle")
                 .text(categorical);
         svg.append("text")      // text label for the x axis
                 .attr("transform", "rotate(-90)")
-                .attr("y", 0 - margin.left)
+                .attr("y", 5 - margin.left)
                 .attr("x",0 - (height / 2))
                 .attr("dy", "1em")
                 .style("text-anchor", "middle")
