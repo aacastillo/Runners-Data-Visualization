@@ -431,7 +431,6 @@ function buildWhiskerPlot(a1, a2, vis_div, data_url) {
         var mousemove = function(d) {
         //console.log('hello?')
         var adjust = tooltipAdjust(vis_div, window.innerWidth, window.innerHeight);
-        console.log(d);
         Tooltip
             .html(d.key + " <br>" 
                 +"min: " + Math.round(d.value.min * 100) / 100 + "<br>"
