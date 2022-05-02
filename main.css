@@ -4,9 +4,13 @@ html, body {
 #primary-var-wrapper {
     width: 100%;
     height: 5%;
+    margin:10px;
     display: flex;
     justify-content: center;
     text-align: center;
+}
+#primary-var-dropdown {
+    margin:0px;
 }
 #all-vis-wrapper {
     display: flex;
