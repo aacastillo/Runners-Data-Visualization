@@ -283,7 +283,7 @@ function buildWhiskerPlot(a1, a2, vis_div, data_url) {
 
     // Read the data and compute summary statistics for each specie
     d3.csv(data_url, function(data) {
-        
+        // Filter empty values out of data
         data = data.filter(function(x){
             return !(x[categorical] === "" || x[quantitative] === '' || x[categorical] === undefined || x[quantitative] === undefined)
         })
@@ -295,62 +295,82 @@ function buildWhiskerPlot(a1, a2, vis_div, data_url) {
             categorical = 'town';
             f = n => 'town';
         }
+
+        const dom = getDomain(data, f(categorical));
+        /*
+        sumstat = [index: {key: category, value: {interquartileRange, max, etx}}
+        for i in range of domain
+        insert {i: getCategoryStats(dom(i))} into sumstat
+
+        getCategoryStats(category):
+            
+            for d in data
+
+        
+        */
+        gmin = 10000000000000;
+        gmax = 0;
+
         // Compute quartiles, median, inter quantile range min and max --> these info are then used to draw the box.
         var sumstat = d3.nest() // nest function allows to group the calculation per level of a factor
         .key(function(d) { return d[categorical];})
         .rollup(function(d) {
-            q1 = d3.quantile(d.map(function(g) { return g[quantitative];}).sort(d3.ascending),.25)
-            median = d3.quantile(d.map(function(g) { return g[quantitative];}).sort(d3.ascending),.5)
-            q3 = d3.quantile(d.map(function(g) { return g[quantitative];}).sort(d3.ascending),.75)
+            min = d3.quantile(d.map(function(g) { return parseFloat(g[quantitative]);}).sort(d3.ascending),0)
+            q1 = d3.quantile(d.map(function(g) {return parseFloat(g[quantitative]);}).sort(d3.ascending),.25)
+            median = d3.quantile(d.map(function(g) { return parseFloat(g[quantitative]);}).sort(d3.ascending),.5)
+            q3 = d3.quantile(d.map(function(g) { return parseFloat(g[quantitative]);}).sort(d3.ascending),.75)
+            max = d3.quantile(d.map(function(g) { return parseFloat(g[quantitative]);}).sort(d3.ascending),1)
             interQuantileRange = q3 - q1
-            min = q1 - 1.5 * interQuantileRange
-            max = q3 + 1.5 * interQuantileRange
+
+            gmin = Math.min(gmin, min)
+            gmax = Math.max(gmax, max)
             return({q1: q1, median: median, q3: q3, interQuantileRange: interQuantileRange, min: min, max: max})
         })
         .entries(data);
-        //labels
-        labeloffset = 0;
-        if(getDomain(data,f(categorical)).length > 11 && categorical != 'month'){
-            labeloffset = 15;
-          }
+        console.log(sumstat)
 
+        //labels
+        
+        labeloffset = 0;
+        if(dom.length > 11 && categorical != 'month'){
+            labeloffset = 15;
+        }
         svg.append("text")      // text label for the x axis
                 .attr("x",width/2)
                 .attr("y",  height + margin.bottom - 10 + labeloffset)
                 .style("text-anchor", "middle")
                 .text(categorical);
-        svg.append("text")
+        svg.append("text")      // text label for the x axis
                 .attr("transform", "rotate(-90)")
                 .attr("y", 0 - margin.left)
                 .attr("x",0 - (height / 2))
                 .attr("dy", "1em")
                 .style("text-anchor", "middle")
-                .text(Units.apply(quantitative,quantitative));
-        //end of labels
+                .text(Units.apply(quantitative, quantitative));
+
         // Show the X scale
-        //console.log(getDomain(data,'town'));
+        
         var x = d3.scaleBand()
             .range([ 0, width ])
-            .domain(getDomain(data, f(categorical)))
+            .domain(dom)
             .paddingInner(1)
             .paddingOuter(.5)
         var xAxisEl = svg.append("g")
             .attr("transform", "translate(0," + height + ")")
             .call(d3.axisBottom(x))
-
-            if(getDomain(data,f(categorical)).length > 11 && categorical != 'month'){
-                xAxisEl.selectAll('text')
-                .attr("y", 0)
-                .attr("x", 9)
-                .attr("dy", ".35em")
-                .attr("transform", "rotate(90)")
-                .style("text-anchor", "start")
-                .style('font-size', 5);
-            } 
+        if(dom.length > 11 && categorical != 'month') { // if domain is large, make the x-axis labels vertical
+            xAxisEl.selectAll('text')
+            .attr("y", 0)
+            .attr("x", 9)
+            .attr("dy", ".35em")
+            .attr("transform", "rotate(90)")
+            .style("text-anchor", "start")
+            .style('font-size', 5);
+        } 
 
         // Show the Y scale
         var y = d3.scaleLinear()
-            .domain([7,13])
+            .domain([gmin-1, gmax+1])
             .range([height, 0])
         svg.append("g").call(d3.axisLeft(y))
 
@@ -368,7 +388,7 @@ function buildWhiskerPlot(a1, a2, vis_div, data_url) {
                 .style("width", 40)
 
         // rectangle for the main box
-        var boxWidth = 20
+        var boxWidth = (width*0.8)/dom.length;
         svg
         .selectAll("boxes")
         .data(sumstat)
