@@ -188,19 +188,34 @@ function catSort(att, dat, idk){
     }
 }
 
+// function tooltipAdjust(visdivID, w, h){
+//   var divNumber = parseInt(visdivID[visdivID.length - 1]);
+//   if(divNumber === 1){
+//     return [0,Math.round(2*57) + 60];
+//   }
+//   if(divNumber === 2){
+//     return [0,Math.round(.5*h + 2*57.58) + 20];
+//   }
+//   if(divNumber === 3){
+//     return [Math.round(w/2),Math.round(2*57) + 60];
+//   }
+//   if(divNumber === 4){
+//     return [Math.round(w/2),Math.round(.5*h + 2*57.58) + 20];
+//   }
+// }
 function tooltipAdjust(visdivID, w, h){
   var divNumber = parseInt(visdivID[visdivID.length - 1]);
   if(divNumber === 1){
-    return [0,Math.round(2*57) + 60];
+    return [0,180];
   }
   if(divNumber === 2){
-    return [0,Math.round(.5*h + 2*57.58) + 20];
+    return [0,.5*h + 140];
   }
   if(divNumber === 3){
-    return [Math.round(w/2),Math.round(2*57) + 60];
+    return [Math.round(w/2),180];
   }
   if(divNumber === 4){
-    return [Math.round(w/2),Math.round(.5*h + 2*57.58) + 20];
+    return [Math.round(w/2),.5*h + 140];
   }
 }
   
@@ -260,6 +275,8 @@ function BuildaBarChart (loc, data, attr, svg, visdivID){
       .style("border-width", "2px")
       .style("border-radius", "5px")
       .style("padding", "5px")
+      .style('left', 0 + 'px')
+      .style('top', 0 + 'px');
   
     // Three function that change the tooltip when user hover / move / leave a cell
     var mouseover = function(d) {
@@ -500,6 +517,8 @@ function BuildaBarChart (loc, data, attr, svg, visdivID){
     .style("border-width", "2px")
     .style("border-radius", "5px")
     .style("padding", "5px")
+    .style('left', 0 + 'px')
+    .style('top', 0 + 'px');
 
   // Three function that change the tooltip when user hover / move / leave a cell
   //console.log(window.innerWidth);

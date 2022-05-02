@@ -124,7 +124,9 @@ function buildTrendGraph(a1, vis_div, data_url) {
         .style("border", "solid")
         .style("border-width", "2px")
         .style("border-radius", "5px")
-        .style("padding", "5px");
+        .style("padding", "5px")
+        .style('left', 0 + 'px')
+        .style('top', 0 + 'px');
     
       // Three function that change the tooltip when user hover / move / leave a cell
       var mouseover = function(d) {
@@ -256,7 +258,9 @@ function buildScatterPlot(a1, a2, vis_div, data_url) {
         .style("border", "solid")
         .style("border-width", "2px")
         .style("border-radius", "5px")
-        .style("padding", "5px");
+        .style("padding", "5px")
+        .style('left', 0 + 'px')
+        .style('top', 0 + 'px');
     
       // Three function that change the tooltip when user hover / move / leave a cell
       var mouseover = function(d) {
@@ -428,7 +432,9 @@ function buildWhiskerPlot(a1, a2, vis_div, data_url) {
         .style("border", "solid")
         .style("border-width", "2px")
         .style("border-radius", "5px")
-        .style("padding", "5px");
+        .style("padding", "5px")
+        .style('left', 0 + 'px')
+        .style('top', 0 + 'px');
     
         // Three function that change the tooltip when user hover / move / leave a cell
         var mouseover = function(d) {
