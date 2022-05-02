@@ -86,8 +86,8 @@ const CatOrder = {
             "order": {
                 'Crime Junkie':0, 'Convos Over Cold Brew':1, 'Ali on the Run':9, 'Run Your Mouth':3, 
                 "I'll Have Another":4, 
-                'Queertalk':6, 'Queer Christian':7, 'Voice in Sport':8, 'Obsessed with Disappeared':17,
-                'Running Things Considered':16, 'Trials Talk':12, 'Torch Talk':13, 
+                'Queertalk':6, 'Queer Christian':7, 'Voice in Sport':12, 'Obsessed with Disappeared':17,
+                'Running Things Considered':16, 'Trials Talk':8, 'Torch Talk':13, 
                 'Citius Mag':14, 'Running for Real':15, 'More Than Running':2
             }},
 

@@ -38,7 +38,7 @@ function removeOldVisualization(vis_div) {
 
 function getDimensions(vis_div) {
     const main_vis = document.getElementById(vis_div);
-    var margin = {top: 50, right: 50, bottom: 50, left: 60},
+    var margin = {top: 50, right: 50, bottom: 50, left: 65},
     width = main_vis.offsetWidth - margin.left - margin.right,
     height = main_vis.offsetHeight - margin.top - margin.bottom;
     return [margin, width, height];
@@ -366,14 +366,17 @@ function buildWhiskerPlot(a1, a2, vis_div, data_url) {
 
         //labels
         const dom = getDomain(data, f(categorical));
-        console.log(dom);
-        // labeloffset = 0;
-        // if(dom.length > 11 && categorical != 'month'){
-        //     labeloffset = 15;
-        // }
+        if(categorical === 'conditions'){
+            swap(dom,1,9);
+          }
+        //console.log(dom);
+        labeloffset = 20;
+        if(dom.length > 11 && categorical != 'month'){
+            labeloffset = 10;
+        }
         svg.append("text")      // text label for the x axis
                 .attr("x",width/2)
-                .attr("y",  height + margin.bottom - 10)
+                .attr("y",  height + margin.bottom - labeloffset)
                 .style("text-anchor", "middle")
                 .text(categorical);
         svg.append("text")      // text label for the x axis
@@ -394,6 +397,7 @@ function buildWhiskerPlot(a1, a2, vis_div, data_url) {
         var xAxisEl = svg.append("g")
             .attr("transform", "translate(0," + height + ")")
             .call(d3.axisBottom(x))
+            .style('font-size', 8.5);
         if(dom.length > 11 && categorical != 'month') { // if domain is large, make the x-axis labels vertical
             xAxisEl.selectAll('text')
             .attr("y", 0)

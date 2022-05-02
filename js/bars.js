@@ -29,6 +29,9 @@ function buildCount (data, attr){
   for(var j in r){
     res.push({val: j, count: r[j]});
   }
+  if(attr === 'conditions'){
+    swap(res,1,9);
+  }
   return res;
 }
   
@@ -85,7 +88,9 @@ function buildClusterCount(data, att1, att2){
     }
     res.push({val: j, att: tempArr});
   }
-  //console.log(res);
+  if(att1 === 'conditions'){
+    swap(res,1,9);
+  }
   return res;
 }
 
@@ -332,6 +337,7 @@ function BuildaBarChart (loc, data, attr, svg, visdivID){
   var xAxisEl = chart.append('g')
     .attr('transform', `translate(0, ${loc.h + loc.y - margin.bottom})`)
     .call(xAxis)
+    .style('font-size', 8.5)
     ;
     if(dom.length > 11 && att != 'month'){
     xAxisEl.selectAll('text')
@@ -587,7 +593,8 @@ function BuildaBarChart (loc, data, attr, svg, visdivID){
     .scale(bandScale);
     var xAxisEl = chart.append('g')
       .attr('transform', `translate(0, ${loc.h + loc.y - margin.bottom})`)
-      .call(xAxis);
+      .call(xAxis)
+      .style('font-size', 8.5);
       if(dom1.length > 11 && att1 != 'month'){
         xAxisEl.selectAll('text')
         .attr("y", 0)
