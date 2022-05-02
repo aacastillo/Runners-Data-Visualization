@@ -1,7 +1,0 @@
-NOTE oON LOADING CSV: 
-    D3 code, takes a csv directly either through a url or a pathname. 
-    Thus we don't need to convert it to JSON or try and convert it into a variable similiar to python.
-    After much research on how to load the csv into a variable in javascript, I came to the conclusion that
-    JavaScript doesn't support this due to security concerns, and that we would only be able to create a variable
-    of the CSV if we were to load it through html File Access API, which would involve additional UI components in HTML.
-
