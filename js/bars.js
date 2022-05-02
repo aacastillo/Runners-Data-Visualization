@@ -191,16 +191,16 @@ function catSort(att, dat, idk){
 function tooltipAdjust(visdivID, w, h){
   var divNumber = parseInt(visdivID[visdivID.length - 1]);
   if(divNumber === 1){
-    return [0,Math.round(57.58) - 15];
+    return [0,Math.round(2*57) + 60];
   }
   if(divNumber === 2){
-    return [0,Math.round(.4*h + 1*57.58)];
+    return [0,Math.round(.5*h + 2*57.58) + 20];
   }
   if(divNumber === 3){
-    return [Math.round(w/2),Math.round(57) - 20];
+    return [Math.round(w/2),Math.round(2*57) + 60];
   }
   if(divNumber === 4){
-    return [Math.round(w/2),Math.round(.4*h + 1* 57.58)];
+    return [Math.round(w/2),Math.round(.5*h + 2*57.58) + 20];
   }
 }
   

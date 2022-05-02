@@ -387,6 +387,48 @@ function buildWhiskerPlot(a1, a2, vis_div, data_url) {
                 .attr("stroke", "black")
                 .style("width", 40)
 
+        //tooltips
+        var Tooltip = d3.select('#'+vis_div)
+        .append("div")
+        .style("opacity", 0)
+        .attr("class", "tooltip")
+        .style("background-color", "white")
+        .style("border", "solid")
+        .style("border-width", "2px")
+        .style("border-radius", "5px")
+        .style("padding", "5px");
+    
+        // Three function that change the tooltip when user hover / move / leave a cell
+        var mouseover = function(d) {
+        Tooltip
+            .style("opacity", 1)
+        d3.select(this)
+            .style("stroke", "black")
+            .style("opacity", 1)
+        }
+        var mousemove = function(d) {
+        //console.log('hello?')
+        var adjust = tooltipAdjust(vis_div, window.innerWidth, window.innerHeight);
+        console.log(d);
+        Tooltip
+            .html(d.key + " <br>" 
+                +"min: " + Math.round(d.value.min * 100) / 100 + "<br>"
+                +"q1 : " + Math.round(d.value.q1 * 100) / 100 + "<br>"
+                +"med: " + Math.round(d.value.median * 100) / 100 + "<br>"
+                +"q3: " + Math.round(d.value.q3 * 100) / 100 + "<br>"
+                +"max: " + Math.round(d.value.max * 100) / 100 + "<br>")
+            .style("left", (d3.mouse(this)[0] + adjust[0]) + "px")
+            .style("top", (d3.mouse(this)[1] + adjust[1]) + "px")
+            .style("opacity", 1)
+        }
+        var mouseleave = function(d) {
+        Tooltip
+            .style("opacity", 0)
+        d3.select(this)
+            //.style("stroke", "none")
+            .style("opacity", 1)
+        }
+
         // rectangle for the main box
         var boxWidth = (width*0.8)/dom.length;
         svg
@@ -400,6 +442,9 @@ function buildWhiskerPlot(a1, a2, vis_div, data_url) {
             .attr("width", boxWidth )
             .attr("stroke", "black")
             .style("fill", "#69b3a2")
+            .on("mouseover", mouseover)
+            .on("mousemove", mousemove)
+            .on("mouseleave", mouseleave)
 
         // Show the median
         svg
