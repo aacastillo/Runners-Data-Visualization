@@ -6,9 +6,12 @@ function RenderDropdowns() {
 function RenderDropdown(vis_id) {
     let dropdownParent = document.getElementById(vis_id+"-dropdown");
     addTrendBarOption(vis_id);
-    QuantitativeAttributes.forEach(att => createDropdownItem(att, dropdownParent));
-    addDivider(dropdownParent);
+    addDivider(dropdownParent, "");
+    addDivider(dropdownParent, "Categorical");
     CategoricalAttributes.forEach(att => createDropdownItem(att, dropdownParent));
+    addDivider(dropdownParent, "");
+    addDivider(dropdownParent, "Quantitative");
+    QuantitativeAttributes.forEach(att => createDropdownItem(att, dropdownParent));
     dropdownParent.addEventListener('change', function() {EventLoadVisualization(vis_id)});
 }
 
@@ -29,12 +32,10 @@ function createDropdownItem(attribute, dropdownParent) {
     dropdownParent.appendChild(option);
 }
 
-function addDivider(dropdownParent) {
+function addDivider(dropdownParent, text) {
     let divider = document.createElement("option");
+    divider.innerHTML = text;
     divider.disabled = true;
-    let hr = document.createElement("hr");
-    hr.classList.add("dropdown-divider");
-    divider.appendChild(hr);
     dropdownParent.appendChild(divider);
 }
 

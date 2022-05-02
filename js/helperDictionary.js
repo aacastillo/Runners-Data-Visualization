@@ -2,7 +2,6 @@ const VIDS = ["single-vis-1", "single-vis-2", "single-vis-3", "single-vis-4"];
 
 const AttributeType = {
     "miles": "quantitative",
-    //"time": "quantitative",
     "pace": "quantitative",
     "calories": "quantitative",
     "steps": "quantitative",
@@ -18,7 +17,6 @@ const AttributeType = {
     "year": "categorical",
     "month": "categorical",
     "season": "categorical",
-    "date": "categorical",
     "day": "categorical",
     "shoes": "categorical",
     "race": "categorical",
@@ -37,7 +35,7 @@ const QuantitativeAttributes = [
 ];
 
 const CategoricalAttributes = [
-    "year","month","season","date","day","shoes","race","towns","state","hour","terrain","conditions","podcast","physical","mental","abs"
+    "year","month","season","day","shoes","race","towns","state","hour","terrain","conditions","podcast","physical","mental","abs"
 ];
 
 const CatOrder = {

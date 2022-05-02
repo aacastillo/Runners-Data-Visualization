@@ -295,19 +295,7 @@ function buildWhiskerPlot(a1, a2, vis_div, data_url) {
             categorical = 'town';
             f = n => 'town';
         }
-
-        const dom = getDomain(data, f(categorical));
-        /*
-        sumstat = [index: {key: category, value: {interquartileRange, max, etx}}
-        for i in range of domain
-        insert {i: getCategoryStats(dom(i))} into sumstat
-
-        getCategoryStats(category):
-            
-            for d in data
-
         
-        */
         gmin = 10000000000000;
         gmax = 0;
 
@@ -330,7 +318,7 @@ function buildWhiskerPlot(a1, a2, vis_div, data_url) {
         console.log(sumstat)
 
         //labels
-        
+        const dom = getDomain(data, f(categorical));
         labeloffset = 0;
         if(dom.length > 11 && categorical != 'month'){
             labeloffset = 15;
