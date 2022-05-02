@@ -9,7 +9,7 @@ const AttributeType = {
     "V02 Max": "quantitative",
     "elevation": "quantitative",
     "EPM": "quantitative",
-    "time of day": "quantitative",
+    //"time of day": "quantitative",
     "people": "quantitative",
     "temp": "quantitative",
     
@@ -31,7 +31,7 @@ const AttributeType = {
 };
 
 const QuantitativeAttributes = [
-    "miles","pace","calories","steps","heart rate","V02 Max","elevation","EPM","time of day","people","temp"
+    "miles","pace","calories","steps","heart rate","V02 Max","elevation","EPM","people","temp"
 ];
 
 const CategoricalAttributes = [
@@ -112,7 +112,7 @@ const Units = {
     "V02 Max": "mL/kg/min",
     "elevation": "ft",
     "EPM": "elev/mile",
-    "TOD": "",
+    "time of day": "",
     "hour": "",
     "people": "",
     "temp": "degrees F",

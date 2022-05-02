@@ -145,6 +145,8 @@ function buildTrendGraph(a1, vis_div, data_url) {
       var mouseleave = function(d) {
         Tooltip
           .style("opacity", 0)
+          .style('left', 0 + 'px')
+      .style('top', 0 + 'px')
         d3.select(this)
           //.style("stroke", "none")
           .style("opacity", 1)
@@ -276,6 +278,8 @@ function buildScatterPlot(a1, a2, vis_div, data_url) {
       var mouseleave = function(d) {
         Tooltip
           .style("opacity", 0)
+          .style('left', 0 + 'px')
+          .style('top', 0 + 'px')
         d3.select(this)
           .style("stroke", "none")
           .style("opacity", 1)
@@ -451,6 +455,8 @@ function buildWhiskerPlot(a1, a2, vis_div, data_url) {
         var mouseleave = function(d) {
         Tooltip
             .style("opacity", 0)
+            .style('left', 0 + 'px')
+            .style('top', 0 + 'px')
         d3.select(this)
             //.style("stroke", "none")
             .style("opacity", 1)

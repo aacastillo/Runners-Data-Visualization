@@ -237,10 +237,10 @@ function BuildaBarChart (loc, data, attr, svg, visdivID){
     .paddingInner(0.05);
 
   var countScale = d3.scaleLinear()
-    .domain([0, Math.round(maxC*4/3)])
+    .domain([0, Math.round(maxC*5/4)])
     .range([0,h]);
   var countScale2 = d3.scaleLinear()
-    .domain([0, Math.round(maxC*4/3)])
+    .domain([0, Math.round(maxC*5/4)])
     .range([h+margin.top,margin.top]);
 
   const g = chart.append('g');
@@ -416,10 +416,10 @@ function BuildaBarChart (loc, data, attr, svg, visdivID){
     var maxC = maxClusterCount(c);
     
     var countScale = d3.scaleLinear()
-      .domain([0, Math.round(maxC*3/2)])
+      .domain([0, Math.round(maxC*5/4)])
       .range([0, h]);
     var countScale2 = d3.scaleLinear()
-      .domain([0, Math.round(maxC*3/2)])
+      .domain([0, Math.round(maxC*5/4)])
       .range([h+margin.top,margin.top]);
 
     var colorScaleMax = 1;
@@ -434,7 +434,7 @@ function BuildaBarChart (loc, data, attr, svg, visdivID){
 
     
         colorScale2 = function(index){
-            if(att2 !='town' && CatOrder[att2].ordered){
+            if(att2 !='town' && CatOrder[att2].ordered && att2 != 'podcast'){
                 return colorScale(dom2[index]);
             }
             var l = dom2.length;
@@ -521,9 +521,12 @@ function BuildaBarChart (loc, data, attr, svg, visdivID){
   var mouseleave = function(d) {
     Tooltip
       .style("opacity", 0)
+      .style('left', 0 + 'px')
+      .style('top', 0 + 'px')
     d3.select(this)
       .style("stroke", "none")
       .style("opacity", 1)
+      
   }
   
     //bars
@@ -612,7 +615,7 @@ function BuildaBarChart (loc, data, attr, svg, visdivID){
         });
       var font = 7;
     if(dom2.length > 25){
-      font = 5;
+      font = 4;
     }
     for(var i in dom2){
       legend.append('text')
