@@ -132,7 +132,6 @@ function getDomain(data, att){
             r.push(data[i][att])
         }
     }
-    console.log(att)
     if(CatOrder[att].ordered === true){
         for(var i = 0; i < r.length; i++){ 
             for(var j = 0; j < ( r.length - i -1 ); j++){
