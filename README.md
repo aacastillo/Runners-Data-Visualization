@@ -16,4 +16,6 @@ The data is stored publicly in github, and is accessed directly by the code. Onc
 
 ## D3 Usage
 
-We implemented the code using HTML, CSS, JavaScript - using d3-graph-gallery as a resource to design our visualizations. Specifically, we utilized the trend, scatterplot and box-and-whiskers components through the d3-graph-gallery website. The site was also helpful in providing guidance for the tooltips feature to enhance interactivity. The bar chart and stacked bar chart visualizations were implemented seperately. Website: https://d3-graph-gallery.com/
+We implemented the code using HTML, CSS, JavaScript - using d3-graph-gallery as a resource to design our visualizations. Specifically, we utilized the trend, scatterplot and box-and-whiskers components through the d3-graph-gallery website. The site was also helpful in providing guidance for the tooltips feature to enhance interactivity. The bar chart and stacked bar chart visualizations were implemented seperately. 
+
+Website: https://d3-graph-gallery.com/
