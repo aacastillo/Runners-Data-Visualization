@@ -580,7 +580,7 @@ function BuildaBarChart (loc, data, attr, svg, visdivID){
             return countScale(d.count);
         })
         .attr("fill", d => {
-          return d3.interpolateHslLong("#74FF41","#7A41FF")(colorScale2(dom2.indexOf(d.val)));
+          return d3.interpolateHslLong("#7A41FF","#74FF41")(colorScale2(dom2.indexOf(d.val)));
         })
         .on("mouseover", mouseover)
         .on("mousemove", mousemove)
@@ -637,7 +637,7 @@ function BuildaBarChart (loc, data, attr, svg, visdivID){
         return legendScale.bandwidth();
       })
       .attr("fill", d => {
-          return d3.interpolateHslLong("#74FF41","#7A41FF")(colorScale2(dom2.indexOf(d)));
+          return d3.interpolateHslLong("#7A41FF","#74FF41")(colorScale2(dom2.indexOf(d)));
         });
       var font = 7;
     if(dom2.length > 25){
