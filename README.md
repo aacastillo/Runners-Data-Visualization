@@ -1,4 +1,8 @@
+## Running Data Visualization
+
 Collaborators: Alan Castillo, Connor Nelson, Dhruv Keyal, Owen Decleene, and Vani Korepu
+
+GitHub Link: https://github.com/aacastillo/Runners-Data-Visualization
 
 ## Description
 
